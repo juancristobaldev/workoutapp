@@ -1,8 +1,40 @@
 import { registerRootComponent } from 'expo';
+import {
+    ApolloClient,InMemoryCache,ApolloProvider,createHttpLink
+} from "@apollo/client"
+import { setContext } from "@apollo/client/link/context";
+import 'react-native-gesture-handler';
+
 
 import App from './App';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// registerRootComponent calls AppRegistry.registerComponent('main', () => App);
-// It also ensures that whether you load the app in Expo Go or in a native build,
-// the environment is set up appropriately
-registerRootComponent(App);
+
+const httpLink = createHttpLink({
+    uri:  "https://trainingapp-api-nodejs.vercel.app/graphql",
+})
+
+const authLink = setContext( async (_, { headers }) => {
+    const token = await AsyncStorage.getItem('@token')
+    return {
+        headers:{
+            ...headers,
+            authorization: token || "",
+        }
+    }
+})
+
+const client = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache({
+        fetchOptions: {
+            credentials: "include",
+        },
+    }),
+});
+
+registerRootComponent(() => (
+    <ApolloProvider client={client}>
+        <App/>
+    </ApolloProvider>
+));
