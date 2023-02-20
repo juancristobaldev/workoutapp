@@ -12,6 +12,8 @@ export const DataProvider = ({children}) => {
     const [folders,setFolders] = useState([])
     const [routines,setRoutines] = useState([])
 
+    console.log('data:',data)
+
 
     useEffect(() => {
         console.log(loading)

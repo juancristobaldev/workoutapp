@@ -22,7 +22,7 @@ export const CalendarField = ({
   minDate = null,
   maxDate = null,
   error = false,
-  disabled
+  disabled,
 }) => {
   const originalFormat = "dd-mm-yyyy";
 

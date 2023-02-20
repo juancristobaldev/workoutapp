@@ -19,7 +19,6 @@ export const GET_ROUTINES_AND_USER_BY_TOKEN = gql`
       name
       dones
       timeRecord
-      exercises
     }
     getUser {
       first_name
@@ -39,7 +38,6 @@ export const GET_ROUTINES_FOLDERS_USER_BY_TOKEN = gql`
       name
       dones
       timeRecord
-      exercises
     }
     getUser {
       id
@@ -48,14 +46,12 @@ export const GET_ROUTINES_FOLDERS_USER_BY_TOKEN = gql`
       email
       date
       password
-      photo
       token
       last_workouts
     }
     getFolders {
       id
       name
-      content
     }
   }
 `;
@@ -67,7 +63,6 @@ export const GET_ROUTINES_BY_TOKEN = gql`
       name
       dones
       timeRecord
-      exercises
     }
   }
 `;
@@ -78,7 +73,6 @@ export const GET_ROUTINE_BY_ID = gql`
       name
       dones
       timeRecord
-      exercises
     }
   }
 `;
@@ -117,7 +111,6 @@ export const GET_FOLDER = gql`
     getFolderById(id: Int) {
       id
       name
-      content
     }
   }
 `;
