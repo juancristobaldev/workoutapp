@@ -86,13 +86,13 @@ export const SignInScreen = ({ navigation }) => {
       <View style={styles.mainContainer}>
         <StatusBar />
         <KeyboardAvoidingView style={{ flex: 1 }}>
-          <FormTitle marginTop={50} form="login" />
+          <FormTitle marginTop={25} form="login" />
           <TextField
             value={values.email}
-            stylesContainer={{ paddingVertical: 5 }}
-            stylesContainerInput={{ borderRadius: 5 }}
             label={texts.LABEL_EMAIL}
-            trailedIcon={"person"}
+            stylesContainer={{ paddingVertical: 5}}
+            stylesContainerInput={{ borderRadius: 5, height:50  }}
+            trailedIcon={"mail"}
             onBlur={() => setFieldTouched("email", true)}
             error={touched.email && Boolean(errors.email)}
             errorText={errors.email && errors.email}
@@ -105,10 +105,10 @@ export const SignInScreen = ({ navigation }) => {
           />
           <TextField
             value={values.password}
+            label={texts.LABEL_PASSWORD}
             secureTextEntry={passwordVisible}
             stylesContainer={{ paddingVertical: 5 }}
-            stylesContainerInput={{ borderRadius: 5 }}
-            label={texts.LABEL_PASSWORD}
+            stylesContainerInput={{ borderRadius: 5, height:50  }}
             trailedIcon={!passwordVisible ? "eye" : "eye-off"}
             functionTrailedIcon={() => setPasswordVisible(!passwordVisible)}
             onBlur={() => setFieldTouched("password", true)}

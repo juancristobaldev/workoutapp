@@ -6,7 +6,7 @@ export const CustomPicker = ({value, onValueChange, items}) => {
 
     const {width,height} = Dimensions.get('screen')
 
-    console.log(value)
+
     
     return (
         <View
@@ -30,7 +30,7 @@ export const CustomPicker = ({value, onValueChange, items}) => {
           onValueChange={onValueChange}
         >
           {items.map((item, index) => (
-            <Picker.Item key={index} value={item.value} label={item.text} />
+            <Picker.Item key={index} value={item.value ? item.value : item.text} label={item.text} />
           ))}
         </Picker>
       </View>

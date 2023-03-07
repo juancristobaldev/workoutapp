@@ -5,9 +5,13 @@ import { Image, View } from "react-native";
 import { DataContext } from "../context/DataProvider";
 
 import * as sizes from "../constants/sizes";
+import { useState } from "react";
+import { useEffect } from "react";
 
 export const UserHeader = () => {
-  const { me } = useContext(DataContext);
+  const { me,loading,data } = useContext(DataContext);
+
+  const [photoProfile,setPhotoProfile] = useState(null)
 
   const date = new Date();
   const days = ["Lun", "Mar", "Mie", "Jue", "Vie", "Sab", "Dom"];
@@ -26,7 +30,13 @@ export const UserHeader = () => {
     "Diciembre",
   ];
 
-  console.log(me)
+useEffect(() => {
+  if(data){
+   if(me.profile){
+     if(me.profile) setPhotoProfile(me.profile.photo)
+   }
+  }
+},[me])
 
   return (
     <View
@@ -46,9 +56,10 @@ export const UserHeader = () => {
         style={{
           width: 50,
           height: 50,
+          borderRadius:50
         }}
         source={{
-          uri: "https://www.linkpicture.com/q/PikPng.com_profile-icon-png_805068.png",
+          uri:photoProfile,
         }}
       />
       <View style={{}}>

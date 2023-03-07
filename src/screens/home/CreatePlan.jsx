@@ -77,7 +77,7 @@ export const CreateAPlan = ({ navigation }) => {
         }}
       >
         <HeaderWithBackButton
-          onPressBack={() => navigation.navigate("main")}
+          onPressBack={() => navigation.navigate("home-main")}
           leadingComponent={
             <>
               <Text

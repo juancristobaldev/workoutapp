@@ -6,7 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { DataProvider } from './src/context/DataProvider';
 import { StackUnLoggedin } from './src/navigation/StackUnLoggedin';
-import { TabLoggedin } from './src/navigation/TabLoggedin';
+import { AnimatedTabLoggedin, StackLoggedin } from './src/navigation/AnimatedTabLoggedin';
+import { createStackNavigator } from '@react-navigation/stack';
 
 
 export default function App() {
@@ -22,22 +23,23 @@ export default function App() {
     }
   }
 
+  const Stack = createStackNavigator();
+
   useEffect(() => {
     getTokenStore()
   },[])
   
-  const Stack = createNativeStackNavigator();
-
-
   return (
       <NavigationContainer>
-        {!isLoggedin ?
-          <StackUnLoggedin/>
-          :
-          <DataProvider>
-            <TabLoggedin/>
-          </DataProvider>
-        }
+        <Stack.Navigator
+        screenOptions={{headerShown:false}}
+        >
+          {!isLoggedin ?
+            <Stack.Screen name='stackUnloggedin' component={StackUnLoggedin}/>
+            :
+            <Stack.Screen name='tabLoggedin' component={AnimatedTabLoggedin}/>
+          }
+        </Stack.Navigator>
       </NavigationContainer>
   );
 }

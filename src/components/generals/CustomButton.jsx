@@ -33,9 +33,9 @@ export const ButtonGeneral = ({
 
   if (outlined) {
     stylesButton.backgroundColor = "transparent";
-    stylesButton.borderColor = theme.THEME_COLOR;
+    stylesButton.borderColor = 'black';
     stylesButton.borderWidth = 2;
-    stylesText.color = theme.THEME_COLOR;
+    stylesText.color = 'black';
   }
 
   return (

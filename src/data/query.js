@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const GET_EXERCISES_BY_TOKEN = gql`
+export const GET_EXERCISES= gql`
   query getExercises {
     getExercises {
       id
@@ -31,27 +31,26 @@ export const GET_ROUTINES_AND_USER_BY_TOKEN = gql`
     }
   }
 `;
-export const GET_ROUTINES_FOLDERS_USER_BY_TOKEN = gql`
+export const GET_ME = gql`
   query {
-    getRoutines {
+    getUser{
       id
-      name
-      dones
-      timeRecord
-    }
-    getUser {
-      id
-      first_name
-      last_name
       email
       date
-      password
-      token
-      last_workouts
-    }
-    getFolders {
-      id
-      name
+      first_name
+      last_name
+      profile{
+        photo
+      },
+      exercises{
+        id
+      },
+      routines{
+        id
+      },
+      folders{
+        id
+      }
     }
   }
 `;

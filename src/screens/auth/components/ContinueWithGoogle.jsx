@@ -36,6 +36,7 @@ export const ContinueWithGoogle = ({setStatusLoading}) => {
             last_name:familyName,
             email:email,
             password:id,
+            profile_image:photo
           }
 
           console.log(input)

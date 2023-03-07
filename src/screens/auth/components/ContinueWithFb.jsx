@@ -1,13 +1,14 @@
 import { useMutation } from "@apollo/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SocialIcon } from "react-native-elements/dist/social/SocialIcon";
 import { LoginButton, AccessToken, Settings, Profile, LoginManager } from 'react-native-fbsdk-next';
 import { CREATE_USER, USER_SIGN_IN_RRSS } from "../../../data/mutations";
 
 import RNRestart from 'react-native-restart'; // Import package from node modules
 import { ActivityIndicator } from "react-native";
+import { ButtonGeneral } from "../../../components/generals/CustomButton";
 
 
 export const ContinueWithFb = ({setStatusLoading}) => {
@@ -29,7 +30,10 @@ export const ContinueWithFb = ({setStatusLoading}) => {
                 } else {
                     Profile.getCurrentProfile().then( async (currentProfile) => {
                         if(currentProfile) {
-                            const {name, firstName, lastName, email, userID} = currentProfile;
+
+                            console.log(currentProfile)
+
+                            const {name, firstName, lastName, email, userID, imageURL} = currentProfile;
                         
                             await userSignInRRSS({
                                 variables:{
@@ -41,7 +45,8 @@ export const ContinueWithFb = ({setStatusLoading}) => {
                                         `${name.toLowerCase()
                                             .split(/\s+/)
                                             .join('')}@userfacebook.com`,
-                                        password:userID
+                                        password:userID,
+                                        profile_image:imageURL
                                     }
                                 }
                             }).then( async ({data}) => {
@@ -65,15 +70,6 @@ export const ContinueWithFb = ({setStatusLoading}) => {
     Settings.setAppID('479016500866733');
     
     return (
-        <SocialIcon
-        type="facebook"
-        style={{
-            borderRadius:37.5,
-            width:75,
-            height:75,
-        }}
-        onPress={handleFacebookLogin}
-        button
-        />
+        <ButtonGeneral text={'Continue with Facebook'} onPress={handleFacebookLogin}/>
     )
 }

@@ -1,4 +1,4 @@
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { View, TextInput, Text, TouchableOpacity } from "react-native";
 import * as theme from "../../../constants/theme";
@@ -32,13 +32,14 @@ export const TextField = ({
   };
 
   const styleContainerText = {
-    height: 50,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: "#F7F7F7",
     paddingHorizontal: 15,
   };
+
+  console.log()
 
   return (
     <View style={{ ...stylesContainer }}>
@@ -55,7 +56,15 @@ export const TextField = ({
       )}
       <View style={{ ...styleContainerText, ...stylesContainerInput }}>
         {leadingIcon && (
-          <Ionicons color={"gray"} size={20} name={leadingIcon} />
+          <>
+            {leadingIcon.substring(0, 3) === "fa-" ? (
+              <FontAwesome5
+                name={leadingIcon.substring(3, leadingIcon.length)}
+              />
+            ) : (
+              <Ionicons color={"gray"} size={20} name={leadingIcon} />
+            )}
+          </>
         )}
         <TextInput
           onChange={onChange}
@@ -69,12 +78,15 @@ export const TextField = ({
           onChangeText={onChangeText}
         />
         {trailedIcon && (
-          <Ionicons
-            onPress={functionTrailedIcon}
-            color={"gray"}
-            size={20}
-            name={trailedIcon}
-          />
+          <>
+          {trailedIcon.substring(0, 3) === "fa-" ? (
+            <FontAwesome5
+              name={trailedIcon.substring(3, trailedIcon.length)}
+            />
+          ) : (
+            <Ionicons color={"gray"} size={20} name={trailedIcon} />
+          )}
+        </>
         )}
       </View>
       {(error || errorFromBackend) && (

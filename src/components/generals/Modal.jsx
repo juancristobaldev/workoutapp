@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, TouchableOpacity, View } from "react-native";
+import { Dimensions, StatusBar, TouchableOpacity, View } from "react-native";
 import { BlurView } from "@react-native-community/blur";
 
 export const CustomModal = ({ children, onPress }) => {
@@ -18,13 +18,13 @@ export const CustomModal = ({ children, onPress }) => {
         }}
       >
         <BlurView
-        style={{
-          position:'absolute',
-          left:0,
-          top:0,
-          bottom:0,
-          right:0
-        }}
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            right: 0,
+          }}
           blurType="light"
           blurAmount={5}
           reducedTransparencyFallbackColor="white"

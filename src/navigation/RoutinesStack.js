@@ -1,20 +1,17 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { CreateAPlan } from "../screens/home/CreatePlan";
 import { Main } from "../screens/home/Main";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import { Routines } from "../screens/routines/Routines";
+import { CreateRoutine } from "../screens/routines/CreateRoutine";
 import { tabBarStyle } from "../constants/styles";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
-export const HomeStack = ({ navigation, route, style }) => {
-  console.log(style);
-  const Stack = createStackNavigator();
-
+export const RoutinesStack = ({ navigation, route }) => {
   useEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
 
-    console.log(navigation);
-
-    if (routeName === "create-main")
+    if (routeName === "create-routines")
       navigation.setOptions({
         tabBarStyle: { ...tabBarStyle, display: "none" },
       });
@@ -24,14 +21,16 @@ export const HomeStack = ({ navigation, route, style }) => {
       });
   }, [navigation, route]);
 
+  const Stack = createStackNavigator();
+
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen name="home-main" component={Main} />
-      <Stack.Screen name="create-main" component={CreateAPlan} />
+      <Stack.Screen name="routines-main" component={Routines} />
+      <Stack.Screen name="create-routines" component={CreateRoutine} />
     </Stack.Navigator>
   );
 };

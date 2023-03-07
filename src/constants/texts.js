@@ -5,7 +5,7 @@ export const BUTTON_REGISTER_CONTINUE = 'Continuar'
 
 export const SUB_TITLE_FORM = 'Completa el formulario para continuar por favor'
 
-export const SIGN_IN = 'Inicia sesion'
+export const SIGN_IN = 'Autenticacion'
 export const SIGN_IN_SUB_TITLE = 'Inicia sesion por favor'
 export const SIGN_IN_BUTTON = 'Iniciar sesion'
 
@@ -63,3 +63,9 @@ export const ERROR_DATE_START_REQUIRED = 'Fecha de inicio obligatoria'
 export const ERROR_DATE_END_REQUIRED = 'Fecha final obligatoria'
 export const ERROR_RANGE_ALREADY_EXIST = 'Este rango ya existe'
 
+
+export const TITLE_YOUR_ROUTINES = 'Tus rutinas'
+export const EMPTY_LIST_ROUTINES = 'Tu lista de rutinas esta vacia'
+export const EMPTY_SEARCH_ROUTINES = 'No existen resultados que coincidan con'
+
+export const SOME_ERROR = 'Ooops, esto es inesperado, reintenta mas tarde'

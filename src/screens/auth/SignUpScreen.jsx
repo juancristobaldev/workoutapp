@@ -128,7 +128,7 @@ export const SignUpScreen = ({ navigation, setErros }) => {
                 value={values.first_name}
                 maxLength={50}
                 stylesContainer={{ width: "50%" }}
-                stylesContainerInput={{ borderRadius: 5, width: "100%" }}
+                stylesContainerInput={{ borderRadius: 5, width: "100%", height:50 }}
                 onChangeText={(text) => setFieldValue("first_name", text)}
                 label={LABEL_FIRSTNAME}
                 placeholder={ENTER_FIRSTNAME}
@@ -139,7 +139,7 @@ export const SignUpScreen = ({ navigation, setErros }) => {
               <TextField
                 value={values.last_name}
                 stylesContainer={{ width: "50%", marginLeft: "1%" }}
-                stylesContainerInput={{ borderRadius: 5 }}
+                stylesContainerInput={{ borderRadius: 5, height:50  }}
                 onChangeText={(text) => setFieldValue("last_name", text)}
                 label={LABEL_LASTNAME}
                 placeholder={ENTER_LASTNAME}
@@ -167,7 +167,7 @@ export const SignUpScreen = ({ navigation, setErros }) => {
             />
             <TextField
               value={values.email}
-              stylesContainerInput={{ borderRadius: 5 }}
+              stylesContainerInput={{ borderRadius: 5, height:50  }}
               label={LABEL_EMAIL}
               placeholder={ENTER_EMAIL}
               trailedIcon={"mail"}
@@ -186,7 +186,7 @@ export const SignUpScreen = ({ navigation, setErros }) => {
             <TextField
               secureTextEntry={passwordVisibility.password}
               value={values.password}
-              stylesContainerInput={{ borderRadius: 5 }}
+              stylesContainerInput={{ borderRadius: 5, height:50  }}
               label={LABEL_PASSWORD}
               placeholder={ENTER_PASSWORD}
               trailedIcon={!passwordVisibility.password ? "eye" : "eye-off"}
@@ -204,7 +204,7 @@ export const SignUpScreen = ({ navigation, setErros }) => {
             <TextField
               secureTextEntry={passwordVisibility.confirmPassword}
               value={values.confirmPassword}
-              stylesContainerInput={{ borderRadius: 5 }}
+              stylesContainerInput={{ borderRadius: 5, height:50  }}
               label={LABEL_REPEAT_PASSWORD}
               placeholder={ENTER_REPEAT_PASSWORD}
               trailedIcon={
