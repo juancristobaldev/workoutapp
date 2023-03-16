@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Dimensions, Text } from "react-native";
 import { View } from "react-native";
-import { CheckBox } from "./generals/CheckBox";
+import { CustomCheckBox } from "./generals/CheckBox";
 
 export const DayPicker = ({ setOptionPicker, optionPicker, plan, setPlan }) => {
   const { width, height } = Dimensions.get("screen");
@@ -129,7 +129,7 @@ export const DayPicker = ({ setOptionPicker, optionPicker, plan, setPlan }) => {
           >
             {item.name}
           </Text>
-          <CheckBox
+          <CustomCheckBox
             style={{ alignSelf: "center" }}
             checked={daysImplicated[index].implicated}
             onPress={() => setDaysImplicated(checkoutHandle(index))}

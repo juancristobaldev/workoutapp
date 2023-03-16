@@ -16,7 +16,6 @@ export const DataProvider = ({children}) => {
 
 
     useEffect(() => {
-        console.log(loading)
         if(!loading){
             if(error) console.log(error)
             if(data) {

@@ -45,8 +45,6 @@ const plans = [
   },
 ];
 
-console.log(new Date());
-
 export const Main = ({ navigation, route }) => {
   const { width } = Dimensions.get("window");
 

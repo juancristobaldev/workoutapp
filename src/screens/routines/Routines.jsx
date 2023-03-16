@@ -8,6 +8,7 @@ import { Loading } from "../../components/Loading";
 import { TabMenu } from "../../components/TabMenu";
 import {
   EMPTY_LIST_ROUTINES,
+  EMPTY_SEARCH,
   EMPTY_SEARCH_ROUTINES,
   SOME_ERROR,
   TITLE_YOUR_ROUTINES,
@@ -21,12 +22,6 @@ export const Routines = ({ navigation, route }) => {
 
   const [searchValue, setSearchValue] = useState("");
 
-  const array = [
-    {name:'item 1'},
-    {name:'item 2'},
-    {name:'item 3'},
-  ]
-
   if (loading) {
     return <Loading />;
   } else {
@@ -38,7 +33,7 @@ export const Routines = ({ navigation, route }) => {
             leadingComponent={<Text>{TITLE_YOUR_ROUTINES}</Text>}
           />
           <ContainerSearch
-            data={array}
+            data={routines}
             loading={loading}
             error={error}
             onError={() => <Text>{SOME_ERROR}</Text>}
@@ -48,10 +43,16 @@ export const Routines = ({ navigation, route }) => {
             onChange={setSearchValue}
             onEmptySearch={() => (
               <Text>
-                {EMPTY_SEARCH_ROUTINES} {searchValue}
+                {EMPTY_SEARCH} {searchValue}
               </Text>
             )}
-            render={(item) => <Text>{item.name}</Text>}
+            render={(item) => (
+              <View>
+                <View>
+                  <Text>{item.name}</Text>
+                </View>
+              </View>
+            )}
           />
         </View>
       </SafeAreaView>

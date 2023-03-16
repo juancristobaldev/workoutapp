@@ -3,12 +3,18 @@ import { useEffect, useState } from "react";
 
 const useList = (nameContent, repeat, apollo, stateComponent) => {
   const { nameGql, gql } = apollo;
-
+  const { data, loading, error } = useQuery(gql);
   const { state, setState } = stateComponent;
 
   const [listForSelect, updateListForSelect] = useState([]);
   const [dataDone, updateDataDone] = useState([]);
-  const { data, loading, error } = useQuery(gql);
+  const [listSelected, updateListSelected] = useState([]);
+
+  console.log(listSelected);
+
+  const totalSelects = listForSelect.filter(
+    (item) => item.select === true
+  ).length;
 
   const getItems = async () => {
     if (data) {
@@ -45,69 +51,64 @@ const useList = (nameContent, repeat, apollo, stateComponent) => {
     }
   };
 
-  const selectOfTheList = (id) => {
-    let newList = [...listForSelect];
+  const selectItem = async (id) => {
+    let newList = [...listForSelect],
+      newListSelected = [...listSelected];
+
+    const itemSelected = listForSelect.find((item) => item.id === id);
+
+    const isExist = newListSelected.find((item) => item.id === id);
+
     newList.forEach((item) => {
       if (item.id === id) {
         if (item.select) item.select = false;
         else item.select = true;
       }
     });
+
+    if (isExist) {
+      const index = newListSelected.findIndex((item) => item.id === id);
+
+      newListSelected.splice(index, 1);
+    } else newListSelected.push(itemSelected);
+
+    await updateListSelected(newListSelected);
     updateListForSelect(newList);
   };
 
   const addItem = async (type) => {
-    const newList = [...state.listOnCreate];
-    const listSelect = [...listForSelect];
-    const listSelectFilt = listForSelect.filter((item) => item.select === true);
-    const newFormCreate = { ...state.dataFormCreate };
+    const newList = [...state.dataFormCreate[nameContent]];
 
-    if (listSelectFilt.length > 0) {
-      await listSelect.forEach((item) => {
-        if (item.select === true) {
-          if (type === "exercise") {
-            item.seriesEx = JSON.parse(item.seriesEx);
-          }
-          item.select = false;
-          newList.push(item);
-          newFormCreate[nameContent].push(item);
+    if (listSelected.length > 0) {
+      await listSelected.forEach((item) => {
+        if (type === "exercises") {
+          item.series = JSON.parse(item.series);
         }
+        item.select = false;
+        newList.push(item);
       });
 
-      for (var i = 0; i < newList.length; i++) newList[i].idList = i;
       setState({
         ...state,
-        modal: false,
-        listOnCreate: newList,
+        modals: {
+          ...state.modals,
+          [nameContent]: { isOpen: false, superSet: false, indexs: null },
+        },
         dataFormCreate: { ...state.dataFormCreate, [nameContent]: newList },
       });
     }
   };
 
-  const deleteItem = (item, type) => {
-    if (type === "exercise") {
-      const newList = [...state.listOnCreate];
-      const newFormCreate = { ...state.dataFormCreate };
+  const deleteItem = (indexExercise,indexCycle) => {
+    const newFormCreate = { ...state.dataFormCreate };
 
-      const index = newList.findIndex(
-        (itemFind) => itemFind.idList === item.idList
-      );
+    if(indexCycle !== undefined) newFormCreate[nameContent][indexExercise].cycle.splice(indexCycle,1)
+    else newFormCreate[nameContent].splice(indexExercise, 1);
 
-      newList.splice(index, 1);
-
-      setState({
-        ...state,
-        listOnCreate: newList,
-        dataFormCreate: newFormCreate,
-      });
-    } else {
-      const newFormCreate = { ...state.dataFormCreate },
-        index = newFormCreate[nameContent].findIndex(
-          (itemFind) => itemFind.id === item.id
-        );
-      newFormCreate[nameContent].splice(index, 1);
-      setState({ ...state, dataFormCreate: newFormCreate });
-    }
+    setState({
+      ...state,
+      dataFormCreate: newFormCreate,
+    });
   };
 
   useEffect(() => {
@@ -118,14 +119,16 @@ const useList = (nameContent, repeat, apollo, stateComponent) => {
     state.searchValue,
     state.listOnCreate,
   ]);
-  
+
   return {
     dataDone,
     loading,
     error,
+    listSelected,
     listForSelect,
+    totalSelects,
     updateListForSelect,
-    selectOfTheList,
+    selectItem,
     addItem,
     deleteItem,
   };

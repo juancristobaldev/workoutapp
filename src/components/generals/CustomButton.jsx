@@ -1,4 +1,4 @@
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import React from "react";
 import { ActivityIndicator, StyleSheet } from "react-native";
 import { TouchableOpacity, Text } from "react-native";
@@ -33,9 +33,9 @@ export const ButtonGeneral = ({
 
   if (outlined) {
     stylesButton.backgroundColor = "transparent";
-    stylesButton.borderColor = 'black';
+    stylesButton.borderColor = "black";
     stylesButton.borderWidth = 2;
-    stylesText.color = 'black';
+    stylesText.color = "black";
   }
 
   return (
@@ -56,18 +56,28 @@ export const ButtonGeneral = ({
       ) : (
         <>
           {leadingIcon && (
-            <MaterialIcons
-              color={colorIcon ? colorIcon : "black"}
-              size={25}
-              name={leadingIcon}
-            />
+            <>
+              {leadingIcon.substring(0, 3) === "fa-" ? (
+                <FontAwesome5
+                  name={leadingIcon.substring(3, leadingIcon.length)}
+                />
+              ) : (
+                <MaterialIcons color={"gray"} size={20} name={leadingIcon} />
+              )}
+            </>
           )}
           <Text style={{ ...stylesText, ...styleText }}>{text}</Text>
           {trailedIcon && (
-            <MaterialIcons
-              color={colorIcon ? colorIcon : "black"}
-              name={trailedIcon}
-            />
+            <>
+              {trailedIcon.substring(0, 3) === "fa-" ? (
+                <FontAwesome5
+                  size={20}
+                  name={trailedIcon.substring(3, trailedIcon.length)}
+                />
+              ) : (
+                <Ionicons color={"gray"} size={20} name={trailedIcon} />
+              )}
+            </>
           )}
         </>
       )}

@@ -32,7 +32,6 @@ export const AnimatedTabLoggedin = (props) => {
   const [screen, setScreen] = useState("main");
   const [routeCreate, setRouteCreate] = useState("");
 
-  console.log(routeCreate);
 
   let sizeCreateValue, widthCreateValue;
 
@@ -53,14 +52,14 @@ export const AnimatedTabLoggedin = (props) => {
       component: HomeStack,
     },
     {
-      route: "folders",
-      icon: "folder",
-      component: FoldersStack,
-    },
-    {
       route: "routines",
       icon: "document-text",
       component: RoutinesStack,
+    },
+    {
+      route: "folders",
+      icon: "folder",
+      component: FoldersStack,
     },
     {
       route: "profile",
@@ -77,8 +76,6 @@ export const AnimatedTabLoggedin = (props) => {
       propsButton;
 
     const focused = accessibilityState.selected;
-
-    console.log(customStyle);
 
     return (
       <TabIcon
@@ -104,7 +101,6 @@ export const AnimatedTabLoggedin = (props) => {
   };
 
   const AnimatedCreate = (propsCreate) => {
-    //   console.log("create:", props);
 
     const sizeCreate = useSharedValue(sizeCreateValue);
     const widthCreate = useSharedValue(widthCreateValue);

@@ -8,8 +8,6 @@ import { DataContext } from "../../context/DataProvider";
 export const Folders = ({ navigation, route }) => {
   const { me, loading } = useContext(DataContext);
 
-  console.log(me);
-
   if (loading) {
     return <Loading />;
   } else {

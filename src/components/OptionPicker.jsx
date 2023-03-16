@@ -56,13 +56,12 @@ export const OptionsPicker = ({
       >
         <Text
           style={[
-            { color: "gray", opacity: 0.8, fontSize: sizes.smallFont },
-            value && { opacity: 1, color: "black" },
+            { opacity: 1, color: "black" , fontSize: sizes.smallFont },
           ]}
         >
           {value ? value : placeholder}
         </Text>
-        <FontAwesome5 size={sizeIcon} name="carot-down" />
+        <FontAwesome5 size={sizeIcon} name="caret-down" />
       </TouchableOpacity>
       {error && (
         <Text

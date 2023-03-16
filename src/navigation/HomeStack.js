@@ -6,13 +6,10 @@ import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { tabBarStyle } from "../constants/styles";
 
 export const HomeStack = ({ navigation, route, style }) => {
-  console.log(style);
   const Stack = createStackNavigator();
 
   useEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
-
-    console.log(navigation);
 
     if (routeName === "create-main")
       navigation.setOptions({

@@ -5,9 +5,9 @@ export const GET_EXERCISES= gql`
     getExercises {
       id
       name
-      typeEx
-      muscleEx
-      seriesEx
+      type
+      muscle
+      series
     }
   }
 `;
@@ -33,22 +33,28 @@ export const GET_ROUTINES_AND_USER_BY_TOKEN = gql`
 `;
 export const GET_ME = gql`
   query {
-    getUser{
+    getUser {
       id
       email
-      date
       first_name
       last_name
-      profile{
+      profile {
         photo
-      },
-      exercises{
+      }
+      exercises {
         id
-      },
-      routines{
+        name
+        type
+        series
+        muscle
+      }
+      routines {
         id
-      },
-      folders{
+        name
+        dones
+        timeRecord
+      }
+      folders {
         id
       }
     }

@@ -4,7 +4,7 @@ import { View, TouchableOpacity } from "react-native";
 
 import * as themes from "../../constants/theme";
 
-export const CheckBox = ({ onPress, checked, size, style }) => {
+export const CustomCheckBox = ({ onPress, checked, size, style }) => {
   const styleCheckbox = {
     width: size,
     height: size,

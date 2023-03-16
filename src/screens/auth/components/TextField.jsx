@@ -39,7 +39,6 @@ export const TextField = ({
     paddingHorizontal: 15,
   };
 
-  console.log()
 
   return (
     <View style={{ ...stylesContainer }}>

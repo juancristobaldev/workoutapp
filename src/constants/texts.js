@@ -66,6 +66,12 @@ export const ERROR_RANGE_ALREADY_EXIST = 'Este rango ya existe'
 
 export const TITLE_YOUR_ROUTINES = 'Tus rutinas'
 export const EMPTY_LIST_ROUTINES = 'Tu lista de rutinas esta vacia'
-export const EMPTY_SEARCH_ROUTINES = 'No existen resultados que coincidan con'
+export const PLACEHOLDER_NAME_ROUTINE = 'Nombre de tu rutina'
+export const ROUTINE_FLOW = 'Flujo de la rutina'
+export const FIRST_SERIE = 'Agrega tu primera serie'
+
+export const EMPTY_SEARCH = 'No existen resultados que coincidan con'
 
 export const SOME_ERROR = 'Ooops, esto es inesperado, reintenta mas tarde'
+
+export const NEW = 'Nuevo'
