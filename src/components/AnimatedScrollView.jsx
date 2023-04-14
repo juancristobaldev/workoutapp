@@ -46,7 +46,7 @@ export const AnimatedScrollView = ({ data, itemRender }) => {
                 })
 
                 if (!item.namePlan) return (
-                    <View style={{ width: spacer }} />
+                    <View key={index} style={{ width: spacer }} />
                 )
                 else return (
                     <AnimatedCardPlan

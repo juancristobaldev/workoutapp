@@ -26,8 +26,6 @@ export const CreateRange = ({ modalRange, setModalRange, plan, setPlan }) => {
     endPicker: false,
   });
 
-  console.log(pickers);
-
   const { values, errors, handleSubmit, setFieldValue } = useFormik({
     initialValues: {
       startDate: "",

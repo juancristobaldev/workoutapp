@@ -19,7 +19,16 @@ import { useList } from "../../hooks/useListToSelect";
 import { GET_EXERCISES } from "../../data/query";
 import { THEME_COLOR } from "../../constants/theme";
 
-export const Exercise = ({ exercise, children, objState, indexExercise, indexCycle }) => {
+export const Exercise = ({
+  exercise,
+  children,
+  objState,
+  indexExercise,
+  indexCycle,
+}) => {
+
+  const {state,setState} = objState
+
   const [showSeries, setShowSeries] = useState(false);
 
   const [showMenu, setShowMenu] = useState(false);
@@ -37,12 +46,12 @@ export const Exercise = ({ exercise, children, objState, indexExercise, indexCyc
 
   let styles = {};
 
-  if(exercise.isSuperSet){
-    styles.width = width - 40 - 10
-    styles.marginLeft = 5
-  }else{
-    styles.width = width - 40
-    styles.marginHorizontal = 20
+  if (exercise.isSuperSet) {
+    styles.width = width - 40 - 10;
+    styles.marginLeft = 5;
+  } else {
+    styles.width = width - 40;
+    styles.marginHorizontal = 20;
   }
 
   return (
@@ -96,17 +105,38 @@ export const Exercise = ({ exercise, children, objState, indexExercise, indexCyc
                 </TouchableOpacity>
               }
             >
-              <Text>Menu</Text>
-              <TouchableOpacity>
+              <Text
+                style={{
+                  padding: 10,
+                  fontWeight: "bold",
+                }}
+              >
+                Menu
+              </Text>
+              <TouchableOpacity onPress={() => {
+                setShowMenu(false)
+                setState({...state, rest:{
+                  isOpen:true,
+                  idList:indexExercise,
+                  rest:null
+                }})
+              }} style={{ padding: 10 }}>
                 <Text>Ajustar descanso entre series</Text>
               </TouchableOpacity>
               <TouchableOpacity
+                style={{ padding: 10 }}
                 onPress={() => {
                   setShowMenu(false);
-                  deleteItem(indexExercise,indexCycle);
+                  deleteItem(indexExercise, indexCycle);
                 }}
               >
-                <Text>Eliminar</Text>
+                <Text
+                  style={{
+                    color: "red",
+                  }}
+                >
+                  Eliminar
+                </Text>
               </TouchableOpacity>
             </Popover>
           </View>
@@ -116,7 +146,12 @@ export const Exercise = ({ exercise, children, objState, indexExercise, indexCyc
                 Super set
               </Text>
             )}
-            <Text style={{ color: "white", paddingLeft: exercise.isSuperSet ? 20 : 0 }}>
+            <Text
+              style={{
+                color: "white",
+                paddingLeft: exercise.isSuperSet ? 20 : 0,
+              }}
+            >
               {exercise.type}
             </Text>
             <Text style={{ color: "white", paddingLeft: 20 }}>

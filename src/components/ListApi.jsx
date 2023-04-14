@@ -6,7 +6,8 @@ export const ListApi = (props) => {
   return (
     <ScrollView
     style={{
-      height:500
+      height:500,
+      ...props.styleScrollView
     }}
     >
       {props.error && props.onError()}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 import { Dimensions, Platform } from "react-native";
 import { Button, StatusBar, Text, View } from "react-native";
 import {
@@ -17,7 +17,9 @@ import { CreateExercise } from "../exercises/CreateExercise";
 import { ButtonGeneral } from "../generals/CustomButton";
 
 import * as sizes from "../../constants/sizes";
-import { FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { EmptyPage } from "../../svg/Empty";
+import { FirstExercise, FirstExercisePage } from "../exercises/FirstExercise";
 
 export const ListExercises = ({ closeModal, stateComponent }) => {
   const {
@@ -36,6 +38,13 @@ export const ListExercises = ({ closeModal, stateComponent }) => {
   );
 
   const { state, setState } = stateComponent;
+
+  const [layoutView, setLayoutView] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
 
   const addSuperSet = () => {
     const superSet = {
@@ -76,7 +85,7 @@ export const ListExercises = ({ closeModal, stateComponent }) => {
     listSelected.forEach((itemSelected) => {
       newData.flow[indexs.indexExercise].cycle.push({
         ...itemSelected,
-        isSuperSet:true,
+        isSuperSet: true,
         series: JSON.parse(itemSelected.series),
       });
     });
@@ -91,6 +100,16 @@ export const ListExercises = ({ closeModal, stateComponent }) => {
     });
   };
 
+  const onLayout = (event) => {
+    const { x, y, width, height: heightV } = event.nativeEvent.layout;
+    setLayoutView({
+      x: x,
+      y: y,
+      width: width,
+      height: heightV,
+    });
+  };
+
   const { width, height } = Dimensions.get("screen");
 
   const [searchValue, setSearchValue] = useState("");
@@ -98,14 +117,15 @@ export const ListExercises = ({ closeModal, stateComponent }) => {
   if (!state.modals.createExercise)
     return (
       <View
+        onLayout={onLayout}
         style={{
           top:
             Platform.OS === "ios"
-              ? 35 + height * 0.125
+              ? 35 + (height - layoutView.height) / 2.5
               : StatusBar.currentHeight,
           ...styles.container,
           width: width - 40,
-          height: height * 0.7,
+          borderRadius: 7.5,
         }}
       >
         <View
@@ -121,6 +141,18 @@ export const ListExercises = ({ closeModal, stateComponent }) => {
             Ejercicios
           </Text>
           <View style={{ flexDirection: "row" }}>
+            {totalSelects > 0 && (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#F7F7F7",
+                  padding: 7.5,
+                  marginRight: 10,
+                  borderRadius: 7.5,
+                }}
+              >
+                <Ionicons size={20} name="trash" />
+              </TouchableOpacity>
+            )}
             <ButtonGeneral
               text="Nuevo"
               styleButton={{
@@ -154,14 +186,10 @@ export const ListExercises = ({ closeModal, stateComponent }) => {
         </View>
         <ContainerSearch
           data={listForSelect}
-          onEmptyData={() => <Text>Empty list</Text>}
-          onEmptySearch={() => (
-            <Text>{`${EMPTY_SEARCH} "${searchValue}"`}</Text>
-          )}
-          styleScrollView={{
-            maxHeight: "20%",
-          }}
-          onLoading={() => <Text>Cargando</Text>}
+          onEmptyData={() => <FirstExercisePage/>}
+          placeholderSearch={"Buscar ejercicios..."}
+          onEmptySearch={() => <EmptyPage searchValue={searchValue} />}
+          onLoading={() => <ActivityIndicator size={"large"} color={"black"} />}
           onError={() => <Text>{SOME_ERROR}</Text>}
           loading={loading}
           error={error}
@@ -252,7 +280,7 @@ export const ListExercises = ({ closeModal, stateComponent }) => {
         </View>
       </View>
     );
-  else return <CreateExercise />;
+  else return <CreateExercise stateComponent={stateComponent} />;
 };
 
 const styles = StyleSheet.create({

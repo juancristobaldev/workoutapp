@@ -3,10 +3,8 @@ import { Text, View, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 
 import { Loading } from "../../components/Loading";
 import { TabMenu } from "../../components/TabMenu";
-import { DataContext } from "../../context/DataProvider";
 
 export const Folders = ({ navigation, route }) => {
-  const { me, loading } = useContext(DataContext);
 
   if (loading) {
     return <Loading />;

@@ -15,9 +15,10 @@ export const TextField = ({
   textErrorFromBackend,
   functionTrailedIcon = null,
   onChangeText,
-  stylesContainer,
+  style,
   stylesContainerInput,
   stylesInput,
+  styleLabel,
   secureTextEntry = false,
   onBlur,
   onFocus,
@@ -29,6 +30,7 @@ export const TextField = ({
   const errorTextStyle = {
     color: "red",
     fontSize: 15,
+    marginTop:10
   };
 
   const styleContainerText = {
@@ -41,13 +43,14 @@ export const TextField = ({
 
 
   return (
-    <View style={{ ...stylesContainer }}>
+    <View style={{ ...style }}>
       {label && (
         <Text
           style={{
             paddingVertical: 10,
             fontSize: sizes.smallFont,
             fontWeight: "bold",
+            ...styleLabel,
           }}
         >
           {label}

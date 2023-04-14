@@ -1822,6 +1822,13 @@
     prompts "^2.4.0"
     semver "^6.3.0"
 
+"@react-native-community/datetimepicker@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-7.0.1.tgz#a8245ec61faa2761954f284c01d9abce32199bf8"
+  integrity sha512-EllGpk6kbEUCvBDDTnHNLJhfkPOI2Yy+KWj3ImOeM9lAA6CkmFlj/mXGCEbfD/Ddu1U7egO/AwqOmG/Bx3IcEQ==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-community/masked-view@^0.1.11":
   version "0.1.11"
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.11.tgz#2f4c6e10bee0786abff4604e39a37ded6f3980ce"
@@ -6114,6 +6121,13 @@ react-native-size-matters@^0.3.1:
   resolved "https://registry.npmjs.org/react-native-size-matters/-/react-native-size-matters-0.3.1.tgz"
   integrity sha512-mKOfBLIBFBcs9br1rlZDvxD5+mAl8Gfr5CounwJtxI6Z82rGrMO+Kgl9EIg3RMVf3G855a85YVqHJL2f5EDRlw==
 
+react-native-stopwatch-timer@^0.0.21:
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/react-native-stopwatch-timer/-/react-native-stopwatch-timer-0.0.21.tgz#52c39f603e36c538bed3466212b1bfb350ed452f"
+  integrity sha512-qFFsD85NkBT1nxo32HMGq3XAtQyMC09p9ZDIEuOED2BOxgs0UpWg/FSTA0MmEoIKMyXUwSE5VxEzBaGP3z1HFw==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-storage@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-native-storage/-/react-native-storage-1.0.1.tgz#2c493875ff76ec301987c951a8302f3a54381241"
@@ -6122,10 +6136,10 @@ react-native-storage@^1.0.1:
     opencollective "^1.0.3"
     opencollective-postinstall "^2.0.2"
 
-react-native-svg@^13.8.0:
-  version "13.8.0"
-  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-13.8.0.tgz#b6a22cf77f8098f910490a13aeb160a37e182f97"
-  integrity sha512-G8Mx6W86da+vFimZBJvA93POw8yz0fgDS5biy6oIjMWVJVQSDzCyzwO/zY0yuZmCDhKSZzogl5m0wXXvW2OcTA==
+react-native-svg@^13.9.0:
+  version "13.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-13.9.0.tgz#8df8a690dd00362601f074dec5d3a86dd0f99c7f"
+  integrity sha512-Ey18POH0dA0ob/QiwCBVrxIiwflhYuw0P0hBlOHeY4J5cdbs8ngdKHeWC/Kt9+ryP6fNoEQ1PUgPYw2Bs/rp5Q==
   dependencies:
     css-select "^5.1.0"
     css-tree "^1.1.3"

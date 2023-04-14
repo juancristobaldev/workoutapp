@@ -34,7 +34,7 @@ export const ButtonGeneral = ({
   if (outlined) {
     stylesButton.backgroundColor = "transparent";
     stylesButton.borderColor = "black";
-    stylesButton.borderWidth = 2;
+    stylesButton.borderWidth = 1;
     stylesText.color = "black";
   }
 

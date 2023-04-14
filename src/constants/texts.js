@@ -75,3 +75,11 @@ export const EMPTY_SEARCH = 'No existen resultados que coincidan con'
 export const SOME_ERROR = 'Ooops, esto es inesperado, reintenta mas tarde'
 
 export const NEW = 'Nuevo'
+
+
+export const TITLE_MODAL_CREATE_EXERCISE = 'Crear ejercicio'
+export const EMPTY_NAME_EXERCISE = 'El nombre de ejercicio es obligatorio.'
+export const ERROR_SHORT_NAME_EXERCISE = 'Nombre demasiado corto, minimo 6 caracteres.'
+export const ERROR_LARGE_NAME_EXERCISE = 'Nombre demasiado largo, maximo 50 caracteres.'
+export const ERROR_REQUIRED_TYPE_EXERCISE = 'Tipo de ejercicio obligatorio.'
+export const ERROR_REQUIRED_MUSCLE_EXERCISE = 'Musculo implicado obligatorio.'

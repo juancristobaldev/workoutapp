@@ -1,11 +1,12 @@
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import React, { useContext, useState } from "react";
 import { Text, View, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import { ContainerSearch } from "../../components/generals/ContainerSearch";
+import { ButtonGeneral } from "../../components/generals/CustomButton";
 import { HeaderWithBackButton } from "../../components/generals/HeaderWithBackButton";
-import { ListApi } from "../../components/ListApi";
 
 import { Loading } from "../../components/Loading";
-import { TabMenu } from "../../components/TabMenu";
+
 import {
   EMPTY_LIST_ROUTINES,
   EMPTY_SEARCH,
@@ -13,45 +14,77 @@ import {
   SOME_ERROR,
   TITLE_YOUR_ROUTINES,
 } from "../../constants/texts";
-import { DataContext } from "../../context/DataProvider";
+
+import * as sizes from "../../constants/sizes";
 
 import { TextField } from "../auth/components/TextField";
+import { FirstRoutine, FirstRoutinePage } from "./icons/FirstRoutine";
+import { RoutinesContext } from "../../context/RoutinesContext";
+import { Empty, EmptyPage } from "../../svg/Empty";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useEffect } from "react";
+import { GET_ROUTINES } from "../../data/query";
+import { useQuery } from "@apollo/client";
+import { useRef } from "react";
+import { RoutineBox } from "./RoutineBox";
 
 export const Routines = ({ navigation, route }) => {
-  const { me, loading, routines, error } = useContext(DataContext);
+
+  const { data, loading, error } = useQuery(GET_ROUTINES);
+  const [listRoutines, setListRoutines] = useState([]);
 
   const [searchValue, setSearchValue] = useState("");
+
+
+  useEffect(() => {
+    if(data && !loading){
+      setListRoutines(data.getRoutines)
+    }
+  },[data,loading])
+  
 
   if (loading) {
     return <Loading />;
   } else {
+
     return (
       <SafeAreaView style={styles.safeArea}>
         <StatusBar />
         <View style={styles.mainContainer}>
-          <HeaderWithBackButton
-            leadingComponent={<Text>{TITLE_YOUR_ROUTINES}</Text>}
-          />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginVertical: 40,
+              marginLeft: 20,
+            }}
+          >
+            <Text
+              style={{
+                alignSelf: "center",
+                fontSize: sizes.mediumFont,
+                fontWeight: "bold",
+              }}
+            >
+              {TITLE_YOUR_ROUTINES}
+            </Text>
+          </View>
           <ContainerSearch
-            data={routines}
+            placeholderSearch={"Buscar rutinas..."}
+            styleScrollView={{
+              marginVertical: 20,
+            }}
+            data={listRoutines}
             loading={loading}
             error={error}
             onError={() => <Text>{SOME_ERROR}</Text>}
             onLoading={() => <Text>Cargando...</Text>}
-            onEmptyData={() => <Text>{EMPTY_LIST_ROUTINES}</Text>}
+            onEmptyData={() => <FirstRoutinePage />}
+            onEmptySearch={() => <EmptyPage searchValue={searchValue} />}
             searchValues={searchValue}
             onChange={setSearchValue}
-            onEmptySearch={() => (
-              <Text>
-                {EMPTY_SEARCH} {searchValue}
-              </Text>
-            )}
-            render={(item) => (
-              <View>
-                <View>
-                  <Text>{item.name}</Text>
-                </View>
-              </View>
+            render={(item, index) => (
+              <RoutineBox key={index} item={item} index={index} navigation={navigation}/>
             )}
           />
         </View>

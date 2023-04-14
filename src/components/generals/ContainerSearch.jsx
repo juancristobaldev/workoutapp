@@ -3,6 +3,8 @@ import { TextField } from "../../screens/auth/components/TextField";
 import { ListApi } from "../ListApi";
 
 const ContainerSearch = ({
+  placeholderSearch,
+  styleScrollView,
   onEmptySearch,
   searchValues,
   error,
@@ -13,7 +15,7 @@ const ContainerSearch = ({
   onEmptyData,
   render,
   children,
-  onChange
+  onChange,
 }) => {
   const [dataSearch, updateDataSearch] = useState([]);
 
@@ -40,12 +42,14 @@ const ContainerSearch = ({
   return (
     <>
       <TextField
-        onChangeText={text => onChange(text)}
-        stylesContainer={{ marginHorizontal: 20 }}
+        placeholder={placeholderSearch}
+        onChangeText={(text) => onChange(text)}
+        style={{ marginHorizontal: 20,marginBottom:20 }}
         stylesContainerInput={{ height: 40, borderRadius: 5 }}
         trailedIcon={"search"}
       />
       <ListApi
+        styleScrollView={styleScrollView}
         children={children}
         searchContents={dataSearch}
         data={data}

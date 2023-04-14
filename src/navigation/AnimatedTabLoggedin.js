@@ -1,19 +1,10 @@
-import { NavigationContainer } from "@react-navigation/native";
+
 import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  createDrawerNavigator,
-  DrawerContent,
-  DrawerContentScrollView,
-  DrawerItem,
-  DrawerItemList,
-} from "@react-navigation/drawer";
-import { Home, HomeStack } from "./HomeStack";
-import { Folders } from "../screens/folders/Folders";
-import { Routines } from "../screens/routines/Routines";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { HomeStack } from "./HomeStack";
+import { Ionicons } from "@expo/vector-icons";
 import { Profile } from "../screens/Profile";
-import { Button, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 
 import { TabIcon } from "../components/TabIcon";
 import Animated, {
@@ -22,7 +13,6 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { Platform } from "react-native";
-import { DataProvider } from "../context/DataProvider";
 import { FoldersStack } from "./FoldersStack";
 import { RoutinesStack } from "./RoutinesStack";
 
@@ -148,7 +138,6 @@ export const AnimatedTabLoggedin = (props) => {
   };
 
   return (
-    <DataProvider>
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
@@ -186,7 +175,6 @@ export const AnimatedTabLoggedin = (props) => {
           );
         })}
       </Tab.Navigator>
-    </DataProvider>
   );
 };
 

@@ -1,6 +1,6 @@
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Text, TouchableOpacity, View } from "react-native";
 
 import * as sizes from "../constants/sizes";
 
@@ -10,20 +10,26 @@ import { CustomPicker } from "./generals/CustomPicker";
 import { useState } from "react";
 
 export const OptionsPicker = ({
+  layoutView,
   items,
   onValueChange,
   value,
   label,
   styleContainer,
+  styleField,
+  stylesLabel,
   sizeIcon,
-  height,
   fontSize,
   fontWeight,
   placeholder,
   error = false,
   disabled,
 }) => {
+  console.log(layoutView.x);
+
   const [open, setOpen] = useState(false);
+
+  const { height: heightScreen } = Dimensions.get("screen");
 
   const stylesText = {
     paddingVertical: 10,
@@ -35,49 +41,63 @@ export const OptionsPicker = ({
   if (fontWeight) stylesText.fontWeight = fontWeight;
 
   return (
-    <View
-      style={{
-        ...styleContainer,
-      }}
-    >
-      <Text style={stylesText}>{label}</Text>
-      <TouchableOpacity
-        disabled={disabled}
-        onPress={() => setOpen(true)}
+    <>
+      <View
         style={{
-          height: height,
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          backgroundColor: "#F7F7F7",
-          paddingHorizontal: 15,
-          borderRadius: 5,
+          ...styleContainer,
         }}
       >
-        <Text
-          style={[
-            { opacity: 1, color: "black" , fontSize: sizes.smallFont },
-          ]}
-        >
-          {value ? value : placeholder}
-        </Text>
-        <FontAwesome5 size={sizeIcon} name="caret-down" />
-      </TouchableOpacity>
-      {error && (
-        <Text
+        <Text style={{...stylesText,...stylesLabel}}>{label}</Text>
+        <TouchableOpacity
+          disabled={disabled}
+          onPress={() => setOpen(true)}
           style={{
-            color: "red",
-            fontSize: sizes.verySmallFont,
+            ...styleField,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            backgroundColor: "#F7F7F7",
+            paddingHorizontal: 15,
+            borderRadius: 5,
           }}
         >
-          {error}
-        </Text>
-      )}
+          <Text
+            style={[{ opacity: 1, color: "black", fontSize: sizes.smallFont }]}
+          >
+            {value ? value : placeholder}
+          </Text>
+          <FontAwesome5 size={sizeIcon} name="caret-down" />
+        </TouchableOpacity>
+        {error && (
+          <Text
+            style={{
+              color: "red",
+              fontSize: sizes.verySmallFont,
+            }}
+          >
+            {error}
+          </Text>
+        )}
+      </View>
       {open && (
-        <CustomModal onPress={() => setOpen(false)}>
-          <CustomPicker value={value} items={items} onValueChange={onValueChange} />
+        <CustomModal
+          styleBlur={
+            layoutView
+              ? {
+                  top: -(heightScreen - layoutView.height) / 2,
+                  left: -layoutView.x,
+                }
+              : {}
+          }
+          onPress={() => setOpen(false)}
+        >
+          <CustomPicker
+            value={value}
+            items={items}
+            onValueChange={onValueChange}
+          />
         </CustomModal>
       )}
-    </View>
+    </>
   );
 };

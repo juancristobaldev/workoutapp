@@ -7,8 +7,12 @@ import { AnimatedScrollView } from "../../components/AnimatedScrollView";
 import { UserHeader } from "../../components/UserHeader";
 import { Loading } from "../../components/Loading";
 import { ButtonGeneral } from "../../components/generals/CustomButton";
-import { DataContext } from "../../context/DataProvider";
 import { TabMenu } from "../../components/TabMenu";
+import { useQuery } from "@apollo/client";
+import { GET_USER } from "../../data/query";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useMe } from "../../hooks/useMe";
 
 const plans = [
   {
@@ -46,11 +50,13 @@ const plans = [
 ];
 
 export const Main = ({ navigation, route }) => {
+
   const { width } = Dimensions.get("window");
 
-  const { me, loading } = useContext(DataContext);
-
   const newData = [{ key: "spacer-left" }, ...plans, { key: "spacer-right" }];
+
+  const {me,loading,error} = useMe()
+
 
   if (loading) {
     return <Loading />;
@@ -63,7 +69,7 @@ export const Main = ({ navigation, route }) => {
       >
         <StatusBar />
         <View style={styles.mainContainer}>
-          <UserHeader />
+          <UserHeader me={me} />
           <View
             style={{
               marginHorizontal: 20,
@@ -71,23 +77,14 @@ export const Main = ({ navigation, route }) => {
               justifyContent: "space-between",
             }}
           >
-            <Text style={styles.titleSectionStyle}>Mis planes</Text>
-            <ButtonGeneral
-              onPress={() => navigation.navigate("create")}
-              text={"Nuevo"}
-              styleButton={{
-                height: 30,
-                width: width * 0.4,
-                borderRadius: 15,
-              }}
-              styleText={{
-                fontWeight: "400",
-              }}
-            />
+            {/*
+                      <Text style={styles.titleSectionStyle}>Mis planes</Text>
           </View>
           <AnimatedScrollView data={newData} />
           <Text style={styles.titleSectionStyle}>Mi actividad</Text>
-
+          
+          */}
+          </View>
         </View>
       </SafeAreaView>
     );
@@ -104,6 +101,6 @@ const styles = StyleSheet.create({
   },
   titleSectionStyle: {
     fontWeight: "bold",
-    fontSize: sizes.smallFont,
+    fontSize: sizes.mediumFont,
   },
 });

@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const GET_EXERCISES= gql`
+export const GET_EXERCISES = gql`
   query getExercises {
     getExercises {
       id
@@ -41,18 +41,18 @@ export const GET_ME = gql`
       profile {
         photo
       }
-      exercises {
-        id
-        name
-        type
-        series
-        muscle
-      }
       routines {
         id
         name
         dones
         timeRecord
+        user {
+          first_name
+          last_name
+        }
+        exercises {
+          id
+        }
       }
       folders {
         id
@@ -61,13 +61,26 @@ export const GET_ME = gql`
   }
 `;
 
-export const GET_ROUTINES_BY_TOKEN = gql`
+export const GET_ROUTINES = gql`
   query getRoutines {
     getRoutines {
       id
       name
       dones
       timeRecord
+      user {
+        first_name
+        last_name
+      }
+      exercises {
+        id
+      }
+      cycles {
+        id
+        exercises {
+          id
+        }
+      }
     }
   }
 `;
@@ -78,6 +91,19 @@ export const GET_ROUTINE_BY_ID = gql`
       name
       dones
       timeRecord
+      user {
+        first_name
+        last_name
+      }
+      exercises {
+        id
+      }
+      cycles {
+        id
+        exercises {
+          id
+        }
+      }
     }
   }
 `;
@@ -95,22 +121,28 @@ export const GET_USERS = gql`
 export const GET_USER = gql`
   query getUser {
     getUser {
-      user
+      id
+      email
+      first_name
+      last_name
+      profile {
+        photo
+      }
     }
   }
 `;
 
 export const GET_USER_BY_EMAIL = gql`
-  query getUserByEmail($email: String!){
-    getUserByEmail(email:$email){
+  query getUserByEmail($email: String!) {
+    getUserByEmail(email: $email) {
       id
       first_name
       last_name
       email
       password
     }
-}
-`
+  }
+`;
 export const GET_FOLDER = gql`
   query getFolderById {
     getFolderById(id: Int) {

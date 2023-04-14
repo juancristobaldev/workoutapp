@@ -2,7 +2,7 @@ import React from "react";
 import { Dimensions, StatusBar, TouchableOpacity, View } from "react-native";
 import { BlurView } from "@react-native-community/blur";
 
-export const CustomModal = ({ children, onPress }) => {
+export const CustomModal = ({ children, onPress, styleTouchable, styleBlur }) => {
   const { width, height } = Dimensions.get("screen");
 
   return (
@@ -14,7 +14,9 @@ export const CustomModal = ({ children, onPress }) => {
           width: width,
           height: height,
           position: "absolute",
-          zIndex: 0,
+          zIndex: 1,
+          left:0,
+          ...styleTouchable
         }}
       >
         <BlurView
@@ -24,6 +26,7 @@ export const CustomModal = ({ children, onPress }) => {
             top: 0,
             bottom: 0,
             right: 0,
+            ...styleBlur
           }}
           blurType="light"
           blurAmount={5}

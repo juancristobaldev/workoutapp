@@ -1,13 +1,10 @@
-import { Ionicons } from "@expo/vector-icons";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Dimensions, SafeAreaView, Text, TextInput } from "react-native";
 import { StatusBar } from "react-native";
 import { StyleSheet } from "react-native";
 import { View } from "react-native";
-import { Button } from "react-native-elements/dist/buttons/Button";
 import { Exercise } from "../../components/exercises/Exercise";
-import { TypeSerie } from "../../components/exercises/TypeSerie";
 import { ButtonGeneral } from "../../components/generals/CustomButton";
 import { HeaderWithBackButton } from "../../components/generals/HeaderWithBackButton";
 import { CustomModal } from "../../components/generals/Modal";
@@ -27,22 +24,33 @@ import { ScrollView } from "react-native-gesture-handler";
 import * as themes from "../../constants/theme";
 import { useMutation } from "@apollo/client";
 import { CREATE_ROUTINE } from "../../data/mutations";
+import { Loading } from "../../components/Loading";
+import { GET_ROUTINES } from "../../data/query";
+import {
+  SetRestModal,
+  setRestModal,
+} from "../../components/modals/setRestModal";
 
-export const CreateRoutine = () => {
-  const { width: widthScreen } = Dimensions.get("screen");
+export const CreateRoutine = ({ navigation }) => {
+  const { width: widthScreen, height: heightScreen } = Dimensions.get("screen");
 
-  const [createRoutine] = useMutation(CREATE_ROUTINE)
+  const [createRoutine, { loading: isLoading }] = useMutation(CREATE_ROUTINE);
 
   const [state, setState] = useState({
     dataFormCreate: {
       name: "",
-      timeRecord:'',
-      dones:0,
+      timeRecord: "",
+      dones: 0,
       flow: [],
     },
     modals: {
       flow: { isOpen: false, superSet: false, indexs: null },
       createExercise: false,
+    },
+    rest: {
+      isOpen: false,
+      idList: false,
+      rest: false,
     },
   });
 
@@ -51,7 +59,7 @@ export const CreateRoutine = () => {
     setState: setState,
   });
 
-  const { dataFormCreate, modals } = state;
+  const { dataFormCreate, modals, rest } = state;
 
   const setDataRoutine = async (text, objEx) => {
     const newData = { ...dataFormCreate };
@@ -69,34 +77,41 @@ export const CreateRoutine = () => {
   };
 
   const handleSubmit = async () => {
-    const dataForm = {...state.dataFormCreate}
+    /* 
+        const dataForm = { ...state.dataFormCreate };
 
-
-    if(dataForm.name.length){
-      if(dataForm.flow.length){
-        dataForm.flow = JSON.stringify(dataForm.flow)
+    if (dataForm.name.length) {
+      if (dataForm.flow.length) {
+        dataForm.flow = JSON.stringify(dataForm.flow);
 
         await createRoutine({
-          variables:{
-            input:{
-              ...dataForm
-            }
-          }
+          variables: {
+            input: {
+              ...dataForm,
+            },
+          },
         }).then(({data}) => {
           console.log(data)
-        })
-      }else{
-        console.log('Error')
+        });
+      } else {
+        console.log("Error");
       }
-    }else{
-      console.log('Nombre obligatorio')
+    } else {
+      console.log("Nombre obligatorio");
     }
-  }
+    */
+    console.log(state.dataFormCreate)
+  };
+
+  useEffect(() => {
+    console.log(state.dataFormCreate.flow);
+  }, [state.dataFormCreate.flow]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar />
       <View style={styles.mainContainer}>
+        {isLoading && <Loading />}
         <HeaderWithBackButton
           leadingComponent={
             <>
@@ -127,7 +142,6 @@ export const CreateRoutine = () => {
         <ScrollView>
           {dataFormCreate.flow.map((exercise, indexExercise) => {
             const { type } = exercise;
-
             if (type === "superSet") {
               return (
                 <View style={{ flexDirection: "row", marginBottom: 15 }}>
@@ -359,6 +373,7 @@ export const CreateRoutine = () => {
           />
         </CustomModal>
       )}
+      {rest.isOpen && <SetRestModal objState={{ state, setState }} />}
     </SafeAreaView>
   );
 };

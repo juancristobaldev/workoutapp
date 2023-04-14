@@ -1,6 +1,7 @@
+import { useQuery } from "@apollo/client";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import React, { useContext } from "react";
+import React from "react";
 import { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import {
@@ -8,18 +9,18 @@ import {
   View,
   Button,
   TextInput,
-  ActivityIndicator,
   SafeAreaView,
   StatusBar,
 } from "react-native";
 import RNRestart from "react-native-restart"; // Import package from node modules
 import { Loading } from "../components/Loading";
-import { TabMenu } from "../components/TabMenu";
 import { tabBarStyle } from "../constants/styles";
-import { DataContext } from "../context/DataProvider";
+import { GET_USER } from "../data/query";
+import { useMe } from "../hooks/useMe";
 
 export const Profile = ({ navigation, route }) => {
-  const { me, loading } = useContext(DataContext);
+
+  const {me,loading,error} = useMe()
 
   useEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
