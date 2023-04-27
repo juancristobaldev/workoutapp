@@ -16,11 +16,32 @@ import { GET_EXERCISES } from "../../data/query";
 import { Loading } from "../Loading";
 import { ButtonGeneral } from "../generals/CustomButton";
 import { useState } from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Ionicons } from "@expo/vector-icons";
 
 export const CreateExercise = ({ stateComponent }) => {
   const { width, height } = Dimensions.get("screen");
 
-  const [createExercise, { loading: isLoading }] = useMutation(CREATE_EXERCISE);
+  const [createExercise] = useMutation(CREATE_EXERCISE, {
+    update(cache, { data: { createExercise } }) {
+      const { getExercises } = cache.readQuery({ query: GET_EXERCISES });
+
+      cache.writeQuery({
+        query: GET_EXERCISES,
+        data: { getExercises: [...getExercises, createExercise.exercise] },
+      });
+    },
+    async onCompleted() {
+      setState({
+        ...state,
+        loading: false,
+        modals: { ...state.modals, createExercise: false },
+      });
+    },
+    onError(error) {
+      console.log(error);
+    },
+  });
 
   const { state, setState } = stateComponent;
 
@@ -63,6 +84,8 @@ export const CreateExercise = ({ stateComponent }) => {
       muscle: Yup.string().required(texts.ERROR_REQUIRED_MUSCLE_EXERCISE),
     }),
     onSubmit: async (values) => {
+      await setState({ ...state, loading: true });
+
       await createExercise({
         variables: {
           input: {
@@ -70,125 +93,140 @@ export const CreateExercise = ({ stateComponent }) => {
             series: JSON.stringify([]),
           },
         },
-        refetchQueries: [{ query: GET_EXERCISES }],
-      })
-        .then(({ data }) => {
-          if (data.createExercise.success) {
-            setState({
-              ...state,
-              modals: { ...state.modals, createExercise: false },
-            });
-          }
-        })
-        .catch((error) => {
-          if (error) {
-            console.log(error);
-          }
-        });
+      });
     },
   });
 
   return (
-    <View
-      onLayout={onLayout}
-      style={{
-        position: "absolute",
-        top: Platform.OS === "ios" ? 35 : StatusBar.currentHeight,
-        ...styles.container,
-        width: width - 40,
-        borderRadius: 7.5,
-        paddingVertical: 15,
-        top: (height - layoutView.height) / 2,
-      }}
-    >
-      {isLoading && <Loading />}
-      <Text
-        style={{
-          fontWeight: "bold",
-          fontSize: sizes.mediumFont,
-          marginHorizontal: 10,
-        }}
-      >
-        {texts.TITLE_MODAL_CREATE_EXERCISE}
-      </Text>
-      <TextField
-        styleLabel={{ fontWeight: "500" }}
-        style={{ marginHorizontal: 10, marginVertical: 5 }}
-        stylesContainerInput={{ borderRadius: 7.5 }}
-        stylesInput={{ paddingVertical: 5 }}
-        value={values.name}
-        onBlur={() => setFieldTouched("name", true)}
-        error={touched.name && Boolean(errors.name)}
-        errorText={errors.name && errors.name}
-        stylesContainer={{ marginHorizontal: 10 }}
-        label={"Nombre del ejercicio"}
-        placeholder="Ingresa un nombre"
-        onChangeText={(text) => setFieldValue("name", text)}
-      />
-      <OptionsPicker
-        stylesLabel={{ fontWeight: "500" }}
-        layoutView={layoutView}
-        styleField={{
-          padding: 5,
-        }}
-        styleContainer={{ marginHorizontal: 10, marginVertical: 5 }}
-        label={"Tipo de ejercicio"}
-        placeholder="Peso adicional"
-        onValueChange={(value) => setFieldValue("type", value)}
-        value={values.type}
-        items={[
-          { text: "Peso adicional" },
-          { text: "Peso asistido" },
-          { text: "Duracion" },
-          { text: "Solo rep" },
-        ]}
-      />
-      <OptionsPicker
-        stylesLabel={{ fontWeight: "500" }}
-        layoutView={layoutView}
-        styleField={{
-          padding: 5,
-        }}
-        styleContainer={{ marginHorizontal: 10, marginVertical: 5 }}
-        label={"Musculo implicado"}
-        placeholder="Espalda"
-        onValueChange={(value) => setFieldValue("muscle", value)}
-        value={values.muscle}
-        items={[
-          { text: "Espalda" },
-          { text: "Pectoral" },
-          { text: "Hombros" },
-          { text: "Trapecio" },
-          { text: "Biceps" },
-          { text: "Triceps" },
-          { text: "Compuesto" },
-        ]}
-      />
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          marginHorizontal: 10,
-          marginTop: 15,
-        }}
-      >
-        <ButtonGeneral
-          styleButton={{
-            backgroundColor: "black",
-            height: 30,
-            borderRadius: 15,
-            width: "45%",
+    <>
+      {state.loading ? (
+        <Loading />
+      ) : (
+        <View
+          onLayout={onLayout}
+          style={{
+            position: "absolute",
+            top: Platform.OS === "ios" ? 35 : StatusBar.currentHeight,
+            ...styles.container,
+            width: width - 40,
+            borderRadius: 7.5,
+            top: (height - layoutView.height) / 2,
+            padding: 20,
           }}
-          styleText={{
-            fontWeight: "400",
-            color: "white",
-          }}
-          text="Crear"
-          onPress={handleSubmit}
-        />
-      </View>
-    </View>
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                fontSize: sizes.mediumFont,
+              }}
+            >
+              {texts.TITLE_MODAL_CREATE_EXERCISE}
+            </Text>
+            <TouchableOpacity
+              style={{
+                backgroundColor: "#F7F7F7",
+                padding: 7.5,
+                borderRadius: 7.5,
+              }}
+              onPress={() =>
+                setState({
+                  ...state,
+                  modals: {
+                    ...state.modals,
+                    createExercise: false,
+                  },
+                })
+              }
+            >
+              <Ionicons name="close" size={20} />
+            </TouchableOpacity>
+          </View>
+          <TextField
+            styleLabel={{ fontWeight: "500" }}
+            style={{ marginVertical: 5 }}
+            stylesContainerInput={{ borderRadius: 7.5 }}
+            stylesInput={{ paddingVertical: 5 }}
+            value={values.name}
+            onBlur={() => setFieldTouched("name", true)}
+            error={touched.name && Boolean(errors.name)}
+            errorText={errors.name && errors.name}
+            stylesContainer={{ marginHorizontal: 10 }}
+            label={"Nombre del ejercicio"}
+            placeholder="Ingresa un nombre"
+            onChangeText={(text) => setFieldValue("name", text)}
+          />
+          <OptionsPicker
+            stylesLabel={{ fontWeight: "500" }}
+            layoutView={layoutView}
+            styleField={{
+              padding: 5,
+            }}
+            styleContainer={{ marginVertical: 5 }}
+            label={"Tipo de ejercicio"}
+            placeholder="Peso adicional"
+            onValueChange={(value) => setFieldValue("type", value)}
+            value={values.type}
+            items={[
+              { text: "Peso adicional" },
+              { text: "Peso asistido" },
+              { text: "Duracion" },
+              { text: "Solo rep" },
+            ]}
+          />
+          <OptionsPicker
+            stylesLabel={{ fontWeight: "500" }}
+            layoutView={layoutView}
+            styleField={{
+              padding: 5,
+            }}
+            styleContainer={{ marginVertical: 5 }}
+            label={"Musculo implicado"}
+            placeholder="Espalda"
+            onValueChange={(value) => setFieldValue("muscle", value)}
+            value={values.muscle}
+            items={[
+              { text: "Espalda" },
+              { text: "Pectoral" },
+              { text: "Hombros" },
+              { text: "Trapecio" },
+              { text: "Biceps" },
+              { text: "Triceps" },
+              { text: "Compuesto" },
+            ]}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              marginTop: 20,
+            }}
+          >
+            <ButtonGeneral
+              styleButton={{
+                backgroundColor: "black",
+                height: 30,
+                borderRadius: 15,
+                width: "45%",
+              }}
+              styleText={{
+                fontWeight: "400",
+                color: "white",
+              }}
+              text="Crear"
+              onPress={handleSubmit}
+            />
+          </View>
+        </View>
+      )}
+    </>
   );
 };
 

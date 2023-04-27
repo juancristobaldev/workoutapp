@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { CreateAPlan } from "../screens/home/CreatePlan";
 import { Main } from "../screens/home/Main";
@@ -10,8 +10,6 @@ import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 export const FoldersStack = ({ navigation, route }) => {
   useEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
-
-    console.log(navigation);
 
     if (routeName === "create-folders")
       navigation.setOptions({
@@ -31,7 +29,11 @@ export const FoldersStack = ({ navigation, route }) => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="folders-main" component={Folders} />
+      <Stack.Screen
+        name="folders-main"
+        initialParams={{ create: "create-folders" }}
+        component={Folders}
+      />
       <Stack.Screen name="create-folders" component={CreateFolder} />
     </Stack.Navigator>
   );

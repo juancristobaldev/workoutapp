@@ -35,7 +35,6 @@ export const UserHeader = ({ me }) => {
     }
   }, [me]);
 
-  console.log(me);
 
   return (
     <View

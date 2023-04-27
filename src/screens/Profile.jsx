@@ -17,6 +17,7 @@ import { Loading } from "../components/Loading";
 import { tabBarStyle } from "../constants/styles";
 import { GET_USER } from "../data/query";
 import { useMe } from "../hooks/useMe";
+import { SafeAreaViewWithTabMenu } from "./SafeAreaViewWithTabMenu";
 
 export const Profile = ({ navigation, route }) => {
 
@@ -39,7 +40,7 @@ export const Profile = ({ navigation, route }) => {
     return <Loading />;
   } else {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaViewWithTabMenu route={route} navigation={navigation} style={styles.safeArea}>
         <StatusBar />
         <View style={styles.mainContainer}>
           <Text>Tu perfil {me.first_name}</Text>
@@ -52,7 +53,7 @@ export const Profile = ({ navigation, route }) => {
             }}
           />
         </View>
-      </SafeAreaView>
+      </SafeAreaViewWithTabMenu>
     );
   }
 };

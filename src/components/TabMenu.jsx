@@ -1,4 +1,5 @@
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import React from "react";
 import { Dimensions } from "react-native";
 import { StyleSheet } from "react-native";
@@ -6,66 +7,72 @@ import { View } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { TabIcon } from "./TabIcon";
 
-export const TabMenu = ({ navigation, routeName }) => {
-  const { width, height } = Dimensions.get("screen");
+const { width, height } = Dimensions.get("screen");
+
+export const TabMenu = ({ navigation, route }) => {
 
   const widthIcon = width * 0.075;
+
+  console.log(route.params);
 
   return (
     <View
       style={{
-        ...styles.container,
-        width: width * 0.9,
-        height: height * 0.075,
-        borderRadius: (height * 0.075) / 5,
+        ...styles.container
       }}
     >
       <TabIcon
         size={widthIcon}
         name={"home"}
-        outline={routeName === "main" ? false : true}
-        onPress={() => navigation.navigate("home")}
+        outline={route.name === "home-main" ? false : true}
+        onPress={() => navigation.navigate("home-main")}
       />
-      <TabIcon
-        size={widthIcon}
-        name={"folder"}
-        outline={routeName === "folders" ? false : true}
-        onPress={() => navigation.navigate("folders")}
-      />
-      {(routeName === "main" ||
-        routeName === "folders" ||
-        routeName === "routines") && (
-        <TouchableOpacity
-          style={{
-              position:'relative',
-              top:-10,
-            backgroundColor: "black",
-            width: widthIcon * 2,
-            height: widthIcon * 2,
-            justifyContent: "center",
-            borderRadius: 50,
-          }}
-        >
-          <Ionicons
-            name="add"
-            color={"white"}
-            style={{
-              alignSelf: "center",
-            }}
-            size={widthIcon * 1.25}
-          />
-        </TouchableOpacity>
-      )}
       <TabIcon
         size={widthIcon}
         name={"document-text"}
-        outline={routeName === "routines" ? false : true}
-        onPress={() => navigation.navigate("routines")}
+        style={{
+          marginLeft: 7.5,
+        }}
+        outline={route.name === "routines-main" ? false : true}
+        onPress={() =>
+          navigation.navigate("routines", {
+            screen: "routines-main"
+          })
+        }
+      />
+      {(route.name === "home-main" ||
+        route.name === "folders" ||
+        route.name === "routines-main") && (
+          <>
+          <TouchableOpacity onPress={() => navigation.navigate(route.params.create)}>
+            <Ionicons
+              name="add-circle"
+              color={"black"}
+              style={{
+                alignSelf: "center",
+              }}
+              size={widthIcon * 1.5}
+            />
+        </TouchableOpacity>
+          </>
+      )}
+      <TabIcon
+        style={{
+          marginRight: 7.5,
+        }}
+        size={widthIcon}
+        name={"folder"}
+        outline={route.name === "folder-main" ? false : true}
+        onPress={() =>
+          navigation.navigate("folders", {
+            screen: "folders-main"
+          })
+        }
       />
       <TabIcon
         size={widthIcon}
         name={"person"}
-        outline={routeName === "profile" ? false : true}
+        outline={route.name === "profile" ? false : true}
         onPress={() => navigation.navigate("profile")}
       />
     </View>
@@ -75,7 +82,7 @@ export const TabMenu = ({ navigation, routeName }) => {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 10,
+    bottom: 20,
     backgroundColor: "white",
     flexDirection: "row",
     justifyContent: "space-around",
@@ -85,6 +92,9 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     shadowColor: "black",
     shadowOffset: { width: 2, height: 2 },
+    width: width * 0.9,
+    height: height * 0.075,
+    borderRadius: (height * 0.075) / 5,
   },
   icon: {
     width: 0,

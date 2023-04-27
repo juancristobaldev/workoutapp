@@ -1,6 +1,7 @@
 export const tabBarStyle = {
   position: "absolute",
   alignItems: "center",
+  zIndex:2,
   backgroundColor: "white",
   shadowOpacity: 0.15,
   shadowRadius: 4,

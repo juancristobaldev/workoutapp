@@ -1,20 +1,17 @@
-import React, { useContext } from "react";
-import { Dimensions } from "react-native";
-import { Text, View, SafeAreaView, StatusBar, StyleSheet } from "react-native";
-
-import * as sizes from "../../constants/sizes";
-import { AnimatedScrollView } from "../../components/AnimatedScrollView";
+import React from "react";
+import { View, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import { UserHeader } from "../../components/UserHeader";
 import { Loading } from "../../components/Loading";
-import { ButtonGeneral } from "../../components/generals/CustomButton";
-import { TabMenu } from "../../components/TabMenu";
-import { useQuery } from "@apollo/client";
-import { GET_USER } from "../../data/query";
 import { useEffect } from "react";
-import { useState } from "react";
 import { useMe } from "../../hooks/useMe";
 
-const plans = [
+import * as sizes from "../../constants/sizes";
+import { tabBarStyle } from "../../constants/styles";
+
+import { ButtonGeneral } from "../../components/generals/CustomButton";
+import { SafeAreaViewWithTabMenu } from "../SafeAreaViewWithTabMenu";
+
+/* const plans = [
   {
     id: 0,
     namePlan: "Personal",
@@ -47,22 +44,19 @@ const plans = [
       },
     ],
   },
-];
+]; */
 
-export const Main = ({ navigation, route }) => {
+export const Main = ({ navigation, route, hiddeTab }) => {
+  const { me, loading, error } = useMe();
 
-  const { width } = Dimensions.get("window");
+  console.log(route)
 
-  const newData = [{ key: "spacer-left" }, ...plans, { key: "spacer-right" }];
-
-  const {me,loading,error} = useMe()
-
-
-  if (loading) {
-    return <Loading />;
-  } else {
+  if (loading) return <Loading />;
+  else {
     return (
-      <SafeAreaView
+      <SafeAreaViewWithTabMenu
+        navigation={navigation}
+        route={route}
         style={{
           backgroundColor: "white",
         }}
@@ -86,7 +80,7 @@ export const Main = ({ navigation, route }) => {
           */}
           </View>
         </View>
-      </SafeAreaView>
+      </SafeAreaViewWithTabMenu>
     );
   }
 };

@@ -1,18 +1,65 @@
+import { useMutation } from "@apollo/client";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import React from "react";
+import { useEffect } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import { State } from "react-native-gesture-handler";
 import { ButtonGeneral } from "../../components/generals/CustomButton";
 import { Loading } from "../../components/Loading";
 
 import * as sizes from "../../constants/sizes";
+import { DELETE_ROUTINE } from "../../data/mutations";
+import { GET_ROUTINES } from "../../data/query";
 import { useMe } from "../../hooks/useMe";
 
-export const RoutineBox = ({ index, item, navigation }) => {
+export const RoutineBox = ({ object, index, item, navigation }) => {
+
+  const [deleteRoutine, { loading: loadingDelete }] = useMutation(
+    DELETE_ROUTINE,
+    {
+      update(cache) {
+        const { getRoutines } = cache.readQuery({ query: GET_ROUTINES });
+
+        const actualList = getRoutines.filter(
+          (routine) => routine.id !== item.id
+        );
+
+        cache.writeQuery({
+          query: GET_ROUTINES,
+          data: { getRoutines: actualList },
+        });
+      },
+      async onCompleted() {},
+      onError(error) {
+        console.log(error);
+      },
+    }
+  );
+
+  const nExercises = [],
+    nCycles = [],
+    flow = JSON.parse(item.flow);
+
   const { me, loading, error } = useMe();
 
+  flow.forEach((exercise) => {
+    if (exercise.type === "superSet") nCycles.push(exercise);
+    else nExercises.push(exercise.id);
+  });
 
-  console.log(item.exercises)
-  if (loading) {
+  const deleteItem = async () => {
+    await deleteRoutine({
+      variables: {
+        input: {
+          id: item.id,
+        },
+      },
+    }).catch((err) => {
+      console.log(err);
+    });
+  };
+
+  if (loading || loadingDelete) {
     return <Loading />;
   } else {
     return (
@@ -54,7 +101,7 @@ export const RoutineBox = ({ index, item, navigation }) => {
               Por: {me.first_name}
             </Text>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => deleteItem()}>
             <Ionicons name="settings" color={"white"} size={25} />
           </TouchableOpacity>
         </View>
@@ -75,7 +122,7 @@ export const RoutineBox = ({ index, item, navigation }) => {
                 marginLeft: 5,
               }}
             >
-              {item.exercises.length} Ejercicios
+              {nExercises.length} Ejercicios
             </Text>
           </View>
           <View
@@ -94,7 +141,7 @@ export const RoutineBox = ({ index, item, navigation }) => {
                 marginLeft: 5,
               }}
             >
-              {item.cycles.length} Super set
+              {nCycles.length} Super set
             </Text>
           </View>
         </View>

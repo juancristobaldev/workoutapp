@@ -46,7 +46,6 @@ const useSeries = (objectList) => {
   const deleteSeries = async (indexSerie, indexExercise, indexCycle) => {
     const newListExercise = [...state.dataFormCreate.flow];
 
-    console.log(indexCycle)
 
     if (indexCycle !== undefined)
       newListExercise[indexExercise].cycle[indexCycle].series.splice(

@@ -67,6 +67,7 @@ export const GET_ROUTINES = gql`
       id
       name
       dones
+      flow
       timeRecord
       user {
         first_name
@@ -91,6 +92,7 @@ export const GET_ROUTINE_BY_ID = gql`
       name
       dones
       timeRecord
+      flow
       user {
         first_name
         last_name

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { CreateAPlan } from "../screens/home/CreatePlan";
 import { Main } from "../screens/home/Main";
@@ -10,25 +10,26 @@ import { RoutinesProvider } from "../context/RoutinesContext";
 import { GoRoutine } from "../screens/routines/GoRoutine";
 
 export const RoutinesStack = ({ navigation, route }) => {
+  const Stack = createStackNavigator();
+
   useEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
 
-    if (routeName === "create-routines")
+    if (routeName === "create-routine" || routeName === "go-routine")
       navigation.setOptions({
         tabBarStyle: { ...tabBarStyle, display: "none" },
       });
-    else
+    else {
       navigation.setOptions({
         tabBarStyle: { ...tabBarStyle, display: "flex" },
       });
-  }, [navigation, route]);
+    }
+  }, [route]);
 
-  const Stack = createStackNavigator();
-
-  const RoutinesScreen = () => {
+  const RoutinesScreen = ({ route: routeStack }) => {
     return (
       <RoutinesProvider>
-        <Routines navigation={navigation} />
+        <Routines route={routeStack} navigation={navigation} />
       </RoutinesProvider>
     );
   };
@@ -36,12 +37,20 @@ export const RoutinesStack = ({ navigation, route }) => {
   return (
     <Stack.Navigator
       screenOptions={{
+        gestureEnabled:false,
         headerShown: false,
       }}
-      initialRouteName={'routines-main'}
+      initialRouteName={"routines-main"}
     >
-      <Stack.Screen name="go-routine" component={GoRoutine} />
-      <Stack.Screen name="routines-main" component={RoutinesScreen} />
+      <Stack.Screen
+        name="go-routine"
+        component={GoRoutine}
+      />
+      <Stack.Screen
+        name="routines-main"
+        initialParams={{ create: "create-routines" }}
+        component={RoutinesScreen}
+      />
       <Stack.Screen name="create-routines" component={CreateRoutine} />
     </Stack.Navigator>
   );

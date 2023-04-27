@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import React from "react";
 import { useState } from "react";
-import { Dimensions, Text, TouchableOpacity } from "react-native";
+import { Dimensions, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import * as sizes from "../../constants/sizes";
@@ -17,7 +17,7 @@ import Popover, { PopoverPlacement } from "react-native-popover-view";
 import { useRef } from "react";
 import { useList } from "../../hooks/useListToSelect";
 import { GET_EXERCISES } from "../../data/query";
-import { THEME_COLOR } from "../../constants/theme";
+import { THEME_COLOR, THEME_RED } from "../../constants/theme";
 
 export const Exercise = ({
   exercise,
@@ -25,9 +25,9 @@ export const Exercise = ({
   objState,
   indexExercise,
   indexCycle,
+  errorNoSerie,
 }) => {
-
-  const {state,setState} = objState
+  const { state, setState } = objState;
 
   const [showSeries, setShowSeries] = useState(false);
 
@@ -44,29 +44,21 @@ export const Exercise = ({
 
   const { type } = exercise;
 
-  let styles = {};
+  let style = {};
 
   if (exercise.isSuperSet) {
-    styles.width = width - 40 - 10;
-    styles.marginLeft = 5;
+    style.width = width - 40 - 10;
+    style.marginLeft = 5;
   } else {
-    styles.width = width - 40;
-    styles.marginHorizontal = 20;
+    style.width = width - 40;
+    style.marginHorizontal = 20;
   }
 
   return (
     <>
-      <View
-        style={{
-          ...styles,
-          backgroundColor: "black",
-          justifyContent: "flex-start",
-          borderRadius: 7.5,
-          marginVertical: 5,
-        }}
-      >
+      <View style={{ ...style, ...styles.container }}>
         <TouchableOpacity
-          style={{ paddingVertical: 10, paddingHorizontal: 15 }}
+          style={styles.touchableExerciseContainer}
           onPress={() => setShowSeries(!showSeries)}
         >
           <View
@@ -113,14 +105,21 @@ export const Exercise = ({
               >
                 Menu
               </Text>
-              <TouchableOpacity onPress={() => {
-                setShowMenu(false)
-                setState({...state, rest:{
-                  isOpen:true,
-                  idList:indexExercise,
-                  rest:null
-                }})
-              }} style={{ padding: 10 }}>
+              <TouchableOpacity
+                onPress={() => {
+                  setShowMenu(false);
+                  setState({
+                    ...state,
+                    rest: {
+                      isOpen: true,
+                      idList: indexExercise,
+                      idExerciseSuperSet:indexCycle,
+                      rest: null,
+                    },
+                  });
+                }}
+                style={{ padding: 10 }}
+              >
                 <Text>Ajustar descanso entre series</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -146,15 +145,31 @@ export const Exercise = ({
                 Super set
               </Text>
             )}
+            {errorNoSerie && (
+              <Text
+                style={{
+                  ...styles.errorText,
+                  paddingLeft: exercise.isSuperSet ? 20 : 0,
+                  paddingRight: exercise.isSuperSet ? 0 : 20,
+                }}
+              >
+                Sin series
+              </Text>
+            )}
             <Text
               style={{
-                color: "white",
+                ...styles.descriptionText,
                 paddingLeft: exercise.isSuperSet ? 20 : 0,
               }}
             >
               {exercise.type}
             </Text>
-            <Text style={{ color: "white", paddingLeft: 20 }}>
+            <Text
+              style={{
+                ...styles.descriptionText,
+                paddingHorizontal: 20,
+              }}
+            >
               {exercise.muscle}
             </Text>
           </View>
@@ -175,3 +190,25 @@ export const Exercise = ({
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "black",
+    justifyContent: "flex-start",
+    borderRadius: 7.5,
+    marginVertical: 5,
+  },
+  touchableExerciseContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  descriptionText: {
+    color: "white",
+    fontSize: sizes.ultraSmall,
+    alignSelf: "center",
+    fontStyle: "italic",
+  },
+  errorText:{
+    color: THEME_RED,
+  }
+});

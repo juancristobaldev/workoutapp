@@ -1,43 +1,47 @@
-import { NavigationContainer } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import { NavigationContainer } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { StackUnLoggedin } from './src/navigation/StackUnLoggedin';
-import { AnimatedTabLoggedin, StackLoggedin } from './src/navigation/AnimatedTabLoggedin';
-import { createStackNavigator } from '@react-navigation/stack';
-
+import { UnLoggedinStack } from "./src/navigation/UnLoggedinStack";
+import { LoggedinStack } from "./src/navigation/LoggedinStack";
+import { createStackNavigator } from "@react-navigation/stack";
 
 export default function App() {
-  const [isLoggedin,setIsLoggedin] = useState(false)
+  const [isLoggedin, setIsLoggedin] = useState(false);
+  const [item, setItem] = useState({
+    name: "stackUnloggedin",
+    component: UnLoggedinStack,
+  });
 
   const getTokenStore = async () => {
     try {
-      const tokenStore = await AsyncStorage.getItem('@token')
-      if(tokenStore !== null) setIsLoggedin(true)
+      const tokenStore = await AsyncStorage.getItem("@token");
+      if (tokenStore !== null) setIsLoggedin(true);
+    } catch (e) {
+      console.log(e);
     }
-    catch (e) {
-      console.log(e)
-    }
-  }
+  };
 
   const Stack = createStackNavigator();
 
   useEffect(() => {
-    getTokenStore()
-  },[])
-  
+    getTokenStore();
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedin) {
+      setItem({ name: "tabLoggedin", component: LoggedinStack });
+    } else {
+      setItem({ name: "stackUnloggedin", component: UnLoggedinStack });
+    }
+  }, [isLoggedin]);
+
   return (
-      <NavigationContainer>
-        <Stack.Navigator
-        screenOptions={{headerShown:false}}
-        >
-          {!isLoggedin ?
-            <Stack.Screen name='stackUnloggedin' component={StackUnLoggedin}/>
-            :
-            <Stack.Screen name='tabLoggedin' component={AnimatedTabLoggedin}/>
-          }
-        </Stack.Navigator>
-      </NavigationContainer>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name={item.name} component={item.component} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }

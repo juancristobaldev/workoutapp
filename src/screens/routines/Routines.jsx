@@ -1,54 +1,41 @@
-import { FontAwesome5, Ionicons } from "@expo/vector-icons";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Text, View, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import { ContainerSearch } from "../../components/generals/ContainerSearch";
-import { ButtonGeneral } from "../../components/generals/CustomButton";
-import { HeaderWithBackButton } from "../../components/generals/HeaderWithBackButton";
-
 import { Loading } from "../../components/Loading";
 
-import {
-  EMPTY_LIST_ROUTINES,
-  EMPTY_SEARCH,
-  EMPTY_SEARCH_ROUTINES,
-  SOME_ERROR,
-  TITLE_YOUR_ROUTINES,
-} from "../../constants/texts";
+import { SOME_ERROR, TITLE_YOUR_ROUTINES } from "../../constants/texts";
 
-import * as sizes from "../../constants/sizes";
-
-import { TextField } from "../auth/components/TextField";
-import { FirstRoutine, FirstRoutinePage } from "./icons/FirstRoutine";
-import { RoutinesContext } from "../../context/RoutinesContext";
-import { Empty, EmptyPage } from "../../svg/Empty";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { FirstRoutinePage } from "./icons/FirstRoutine";
+import { EmptyPage } from "../../svg/Empty";
 import { useEffect } from "react";
 import { GET_ROUTINES } from "../../data/query";
 import { useQuery } from "@apollo/client";
-import { useRef } from "react";
 import { RoutineBox } from "./RoutineBox";
 
-export const Routines = ({ navigation, route }) => {
+import * as sizes from "../../constants/sizes";
+import { SafeAreaViewWithTabMenu } from "../SafeAreaViewWithTabMenu";
 
-  const { data, loading, error } = useQuery(GET_ROUTINES);
+export const Routines = ({ navigation, route, hiddeTab }) => {
+  const { data, loading: loadingGet, error } = useQuery(GET_ROUTINES);
   const [listRoutines, setListRoutines] = useState([]);
 
   const [searchValue, setSearchValue] = useState("");
 
-
   useEffect(() => {
-    if(data && !loading){
-      setListRoutines(data.getRoutines)
+    if (data && !loadingGet) {
+      setListRoutines(data.getRoutines);
     }
-  },[data,loading])
-  
+  }, [data, loadingGet, route]);
 
-  if (loading) {
+  if (loadingGet) {
     return <Loading />;
   } else {
-
     return (
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaViewWithTabMenu
+        navigation={navigation}
+        route={route}
+        style={styles.safeArea}
+      >
         <StatusBar />
         <View style={styles.mainContainer}>
           <View
@@ -75,7 +62,7 @@ export const Routines = ({ navigation, route }) => {
               marginVertical: 20,
             }}
             data={listRoutines}
-            loading={loading}
+            loading={loadingGet}
             error={error}
             onError={() => <Text>{SOME_ERROR}</Text>}
             onLoading={() => <Text>Cargando...</Text>}
@@ -84,11 +71,17 @@ export const Routines = ({ navigation, route }) => {
             searchValues={searchValue}
             onChange={setSearchValue}
             render={(item, index) => (
-              <RoutineBox key={index} item={item} index={index} navigation={navigation}/>
+              <RoutineBox
+                object={route.params.object}
+                key={index}
+                item={item}
+                index={index}
+                navigation={navigation}
+              />
             )}
           />
         </View>
-      </SafeAreaView>
+      </SafeAreaViewWithTabMenu>
     );
   }
 };

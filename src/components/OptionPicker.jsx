@@ -25,7 +25,7 @@ export const OptionsPicker = ({
   error = false,
   disabled,
 }) => {
-  console.log(layoutView.x);
+
 
   const [open, setOpen] = useState(false);
 

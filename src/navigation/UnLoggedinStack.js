@@ -3,9 +3,7 @@ import React from "react";
 import { SignInScreen } from "../screens/auth/SignInScreen";
 import { SignUpScreen } from "../screens/auth/SignUpScreen";
 
-export const StackUnLoggedin = (props ) => {
-
-  console.log(props)
+export const UnLoggedinStack = (props) => {
     
     const Stack = createNativeStackNavigator();
 

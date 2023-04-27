@@ -14,7 +14,6 @@ export const RoutinesProvider = ({children}) => {
     useEffect(() => {
         if(!loading && data){
             setRoutines(data.getRoutines)
-            console.log('routines:',data.getRoutines)
         }
     },[data,loading,error])
 

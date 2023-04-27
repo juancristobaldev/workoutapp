@@ -9,8 +9,9 @@ import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { useEffect } from "react";
 
-export const SetRestModal = ({ objState }) => {
+export const SetRestModal = ({ objState, setRest }) => {
   const { state, setState } = objState;
 
   const { dataFormCreate, rest } = state;
@@ -29,6 +30,8 @@ export const SetRestModal = ({ objState }) => {
     height: 0,
   });
 
+  console.log(rest);
+
   const onLayout = (event) => {
     const { x, y, width, height } = event.nativeEvent.layout;
     setLayoutView({
@@ -45,6 +48,17 @@ export const SetRestModal = ({ objState }) => {
 
   const widthContainer = width * 0.85;
 
+  let nameExercise;
+
+  if (rest.idExerciseSuperSet)
+    nameExercise =
+      dataFormCreate.flow[rest.idList].cycle[rest.idExerciseSuperSet].name;
+  else nameExercise = dataFormCreate.flow[rest.idList].name;
+
+  useEffect(() => {
+    if (state.errors.length > 0) setState({ ...state, errors: [] });
+  }, [rest.minutes, rest.seconds]);
+
   return (
     <CustomModal
       onPress={() =>
@@ -53,8 +67,10 @@ export const SetRestModal = ({ objState }) => {
           rest: {
             isOpen: false,
             idList: false,
-            rest: null,
+            minutes: false,
+            seconds: false,
           },
+          errors: [],
         })
       }
     >
@@ -86,7 +102,7 @@ export const SetRestModal = ({ objState }) => {
               fontWeight: "bold",
             }}
           >
-            {dataFormCreate.flow[rest.idList].name}
+            {nameExercise}
           </Text>
           <Text
             style={{
@@ -105,6 +121,7 @@ export const SetRestModal = ({ objState }) => {
             flexDirection: "row",
             justifyContent: "space-between",
             marginHorizontal: 20,
+            marginBottom: 10,
           }}
         >
           <View
@@ -119,9 +136,19 @@ export const SetRestModal = ({ objState }) => {
                 backgroundColor: "#F7F7F7",
                 padding: 10,
                 width: "100%",
+                borderColor:
+                  state.errors.length > 0 && !state.rest.minutes
+                    ? "red"
+                    : "white",
+                borderWidth: 1,
+                borderRadius: 5,
               }}
             >
-              <TextInput />
+              <TextInput
+                onChangeText={(text) =>
+                  setState({ ...state, rest: { ...state.rest, minutes: text } })
+                }
+              />
             </View>
           </View>
           <View
@@ -136,21 +163,40 @@ export const SetRestModal = ({ objState }) => {
                 backgroundColor: "#F7F7F7",
                 padding: 10,
                 width: "100%",
+                borderColor:
+                  state.errors.length > 0 && !state.rest.seconds
+                    ? "red"
+                    : "white",
+                borderWidth: 1,
+                borderRadius: 5,
               }}
             >
-              <TextInput />
+              <TextInput
+                onChangeText={(text) =>
+                  setState({ ...state, rest: { ...state.rest, seconds: text } })
+                }
+              />
             </View>
           </View>
         </View>
+        {state.errors.length > 0 && (
+          <Text
+            style={{ color: "red", marginHorizontal: 20, fontStyle: "italic" }}
+          >
+            {state.errors[0]}
+          </Text>
+        )}
         <View
           style={{
             flexDirection: "row",
             justifyContent: "flex-end",
             marginHorizontal: 20,
-            marginVertical: 20,
+            marginTop: 10,
+            marginBottom: 20,
           }}
         >
           <ButtonGeneral
+            onPress={() => setRest()}
             text={"Hecho"}
             styleText={{ color: "white", fontWeight: "400" }}
             styleButton={{

@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 
 const useList = (nameContent, repeat, apollo, stateComponent) => {
   const { nameGql, gql } = apollo;
-  const { data, loading, error } = useQuery(gql);
+  const { data, loading, error } = useQuery(gql, {
+    fetchPolicy: "cache-first",
+  });
   const { state, setState } = stateComponent;
 
   const [listForSelect, updateListForSelect] = useState([]);
   const [dataDone, updateDataDone] = useState([]);
   const [listSelected, updateListSelected] = useState([]);
-
-  console.log(listSelected);
 
   const totalSelects = listForSelect.filter(
     (item) => item.select === true
@@ -99,10 +99,11 @@ const useList = (nameContent, repeat, apollo, stateComponent) => {
     }
   };
 
-  const deleteItem = (indexExercise,indexCycle) => {
+  const deleteItem = (indexExercise, indexCycle) => {
     const newFormCreate = { ...state.dataFormCreate };
 
-    if(indexCycle !== undefined) newFormCreate[nameContent][indexExercise].cycle.splice(indexCycle,1)
+    if (indexCycle !== undefined)
+      newFormCreate[nameContent][indexExercise].cycle.splice(indexCycle, 1);
     else newFormCreate[nameContent].splice(indexExercise, 1);
 
     setState({

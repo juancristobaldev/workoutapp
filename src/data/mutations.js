@@ -35,6 +35,13 @@ export const CREATE_EXERCISE = gql`
     createExercise(input: $input) {
       errors
       success
+      exercise{
+        id
+        name
+        type
+        series
+        muscle
+      }
     }
   }
 `;
@@ -43,6 +50,7 @@ export const DELETE_EXERCISE = gql`
     deleteExercise(input: $input) {
       errors
       success
+      exercises
     }
   }
 `;
@@ -50,6 +58,22 @@ export const DELETE_EXERCISE = gql`
 export const CREATE_ROUTINE = gql`
   mutation createRoutine($input: CreateRoutineInput!) {
     createRoutine(input: $input) {
+      routine {
+        id
+        name
+        dones
+        flow
+        timeRecord
+        user{
+          id
+        }
+        exercises{
+          id
+        }
+        cycles{
+          cycles
+        }
+      }
       errors
       success
     }
@@ -60,6 +84,11 @@ export const DELETE_ROUTINE = gql`
     deleteRoutine(input: $input) {
       errors
       success
+      user{
+        routines{
+          id
+        }
+      }
     }
   }
 `;
